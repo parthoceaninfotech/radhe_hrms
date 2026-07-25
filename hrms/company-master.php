@@ -451,6 +451,15 @@ include 'header.php';
                           <select class="form-select form-select-sm bg-white" name="register_format"
                             id="register_format" style="font-size: 11px;">
                             <option value=""></option>
+                            <option value="Format One">Format One</option>
+                            <option value="Format Two">Format Two</option>
+                            <option value="Format Three">Format Three</option>
+                            <option value="Format Four">Format Four</option>
+                            <option value="Format Morbi">Format Morbi</option>
+                            <option value="Branch Name In Register">Branch Name In Register</option>
+                            <option value="Production Inc. Add in Spe. Allow.">Production Inc. Add in Spe. Allow.
+                            </option>
+                            <option value="Salary Register Holiday">Salary Register Holiday</option>
                           </select>
                         </div>
                       </div>
