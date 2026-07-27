@@ -20,26 +20,5 @@
 <!-- Page JS -->
 
 <script>
-  function makeFullScreen() {
-    var elem = document.documentElement;
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen().catch(function (err) {
-        console.log("Error: ", err);
-      });
-    } else if (elem.webkitRequestFullscreen) { /* Safari */
-      elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) { /* IE11 */
-      elem.msRequestFullscreen();
-    }
-  }
 
-  // Trigger on first click or touch
-  function triggerFS() {
-    makeFullScreen();
-    document.removeEventListener('click', triggerFS, true);
-    document.removeEventListener('touchend', triggerFS, true);
-  }
-
-  document.addEventListener('click', triggerFS, true);
-  document.addEventListener('touchend', triggerFS, true);
 </script>

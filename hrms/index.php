@@ -46,6 +46,19 @@ include 'header.php';
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Redirect if Escape key is pressed
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        window.location.href = '../dashboard.php';
+      }
+    });
+
+    // Listen for modal hide event
+    const modalEl = document.getElementById("companySelectModal");
+    modalEl.addEventListener('hide.bs.modal', () => {
+      window.location.href = '../dashboard.php';
+    });
+
     fetch('actions/company-master-action.php?action=list')
       .then(res => res.json())
       .then(response => {
@@ -73,7 +86,7 @@ include 'header.php';
               selectBody.appendChild(tr);
             });
 
-            const selectModal = new bootstrap.Modal(document.getElementById("companySelectModal"));
+            const selectModal = new bootstrap.Modal(modalEl);
             selectModal.show();
           } else {
             // If no company exists, redirect to company master to create one
