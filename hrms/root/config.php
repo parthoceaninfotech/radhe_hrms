@@ -13,7 +13,7 @@ define('SITE_NAME', 'Radhe HRMS Software');
 define('SITE_LIVE_URL', 'http://radhe.oceanhub.co.in/radhe_hrms/hrms/');
 
 // site running in live server or locaL
-define('SITE_MODE', '0');
+define('SITE_MODE', '1');
 define('DB_PREFIX', 'tbl_');
 
 
