@@ -8,6 +8,13 @@ if (!isset($_SESSION['id']) || $_SESSION['id'] == '') {
 }
 $current_page = basename($_SERVER['PHP_SELF']);
 
+if ($current_page !== 'index.php') {
+  if (!isset($_SESSION['selected_company_id']) || intval($_SESSION['selected_company_id']) <= 0) {
+    header("Location: index.php");
+    exit;
+  }
+}
+
 if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_company_id']) > 0) {
   if (!isset($_SESSION['selected_company_name'])) {
     require_once __DIR__ . '/root/config.php';
@@ -548,7 +555,7 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                 </li>
                 <!-- Exit -->
                 <li class="menu-item">
-                  <a href="../dashboard.php" class="menu-link">
+                  <a href="exit.php" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-logout"></i>
                     <div data-i18n="Exit">Exit</div>
                   </a>

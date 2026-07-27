@@ -1404,13 +1404,7 @@ include 'header.php';
       }
     });
 
-    // Exit button click redirects to index
-    const btnExit = document.getElementById("btnExit");
-    if (btnExit) {
-      btnExit.addEventListener('click', () => {
-        window.location.href = 'index?change_company=1';
-      });
-    }
+
 
     // --- CRUD AJAX LOGIC ---
     let companyRecords = [];

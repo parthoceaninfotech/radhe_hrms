@@ -2,12 +2,10 @@
 if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
-if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_company_id']) > 0 && !isset($_GET['change_company'])) {
-  header("Location: company-master.php");
-  exit;
-}
 $pageTitle = "Home - Payroll System";
 include 'header.php';
+
+$showModal = (!isset($_SESSION['selected_company_id']) || intval($_SESSION['selected_company_id']) <= 0 || isset($_GET['change_company'])) ? 'true' : 'false';
 ?>
 
 <!-- Content -->
@@ -53,6 +51,8 @@ include 'header.php';
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    const showModal = <?php echo $showModal; ?>;
+
     // Redirect if Escape key is pressed
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -66,42 +66,44 @@ include 'header.php';
       window.location.href = '../dashboard.php';
     });
 
-    fetch('actions/company-master-action.php?action=list')
-      .then(res => res.json())
-      .then(response => {
-        if (response.status === 'success') {
-          const companyRecords = response.data;
-          if (companyRecords.length > 0) {
-            const selectBody = document.getElementById("companySelectBody");
-            selectBody.innerHTML = "";
-            companyRecords.forEach((rec) => {
-              const tr = document.createElement("tr");
-              tr.style.cursor = "pointer";
-              tr.innerHTML = `<td><strong>${rec.company_code || ''}</strong></td><td>${rec.company_name || ''}</td>`;
-              tr.addEventListener('click', () => {
-                fetch(`actions/company-master-action.php?action=select&id=${rec.id}`)
-                  .then(r => r.json())
-                  .then(selResponse => {
-                    if (selResponse.status === 'success') {
-                      window.location.href = 'company-master.php';
-                    } else {
-                      alert("Error selecting company: " + selResponse.message);
-                    }
-                  })
-                  .catch(err => console.error("Error setting active company session: ", err));
+    if (showModal) {
+      fetch('actions/company-master-action.php?action=list')
+        .then(res => res.json())
+        .then(response => {
+          if (response.status === 'success') {
+            const companyRecords = response.data;
+            if (companyRecords.length > 0) {
+              const selectBody = document.getElementById("companySelectBody");
+              selectBody.innerHTML = "";
+              companyRecords.forEach((rec) => {
+                const tr = document.createElement("tr");
+                tr.style.cursor = "pointer";
+                tr.innerHTML = `<td><strong>${rec.company_code || ''}</strong></td><td>${rec.company_name || ''}</td>`;
+                tr.addEventListener('click', () => {
+                  fetch(`actions/company-master-action.php?action=select&id=${rec.id}`)
+                    .then(r => r.json())
+                    .then(selResponse => {
+                      if (selResponse.status === 'success') {
+                        window.location.href = 'index.php';
+                      } else {
+                        alert("Error selecting company: " + selResponse.message);
+                      }
+                    })
+                    .catch(err => console.error("Error setting active company session: ", err));
+                });
+                selectBody.appendChild(tr);
               });
-              selectBody.appendChild(tr);
-            });
 
-            const selectModal = new bootstrap.Modal(modalEl);
-            selectModal.show();
-          } else {
-            // If no company exists, redirect to company master to create one
-            window.location.href = 'company-master.php';
+              const selectModal = new bootstrap.Modal(modalEl);
+              selectModal.show();
+            } else {
+              // If no company exists, redirect to company master to create one
+              window.location.href = 'company-master.php';
+            }
           }
-        }
-      })
-      .catch(err => console.error("Error fetching companies: ", err));
+        })
+        .catch(err => console.error("Error fetching companies: ", err));
+    }
   });
 </script>
 

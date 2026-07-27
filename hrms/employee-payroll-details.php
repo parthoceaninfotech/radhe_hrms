@@ -19,245 +19,223 @@ include 'header.php';
       <span class="badge bg-danger px-2 py-1" style="font-size: 10px; font-weight: 600;"># Press [Esc] For Cancel</span>
     </div>
 
-    <div class="card-body p-3 bg-white">
+    <div class="card-body p-3" style="background-color: #cbd2f6 !important;">
       <form id="payrollDetailsForm">
         
+        <!-- PAYROLL DETAILS Inner Title Bar -->
+        <div class="p-2 mb-2 fw-bold text-dark border" style="background-color: #d1d5db !important; border-color: #9ca3af !important; font-size: 13px; letter-spacing: 0.5px;">
+          PAYROLL DETAILS
+        </div>
+
         <!-- Classic Group Box using Fieldset/Legend -->
-        <fieldset class="border p-3 rounded mb-2" style="border-color: #a3b8cc !important;">
+        <fieldset class="border p-3 rounded mb-2" style="border-color: #9ca3af !important; background-color: #e5e7eb !important;">
           <legend class="float-none w-auto px-2 fw-bold text-primary" style="font-size: 12px; margin-bottom: 0;">
-            Employee Payroll Configuration</legend>
+            Payroll Details</legend>
 
-          <!-- Nav Tabs styled classically -->
-          <ul class="nav nav-tabs mb-0 border-bottom-0" id="payrollTabs" role="tablist"
-            style="margin-left: 0 !important; margin-right: 0 !important; padding-left: 4px !important;">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active fw-bold py-1 px-3" id="payroll-tab" data-bs-toggle="tab"
-                data-bs-target="#payroll-content" type="button" role="tab" aria-controls="payroll-content" aria-selected="true"
-                style="font-size: 11px;">Payroll Details</button>
-            </li>
-          </ul>
-
-          <!-- Tab Content Container with light blue background and border -->
-          <div class="tab-content border p-3 rounded-bottom bg-legacy-blue" id="payrollTabsContent">
-            <div class="tab-pane fade show active" id="payroll-content" role="tabpanel" aria-labelledby="payroll-tab">
-              
-              <!-- Upper Config Box -->
-              <div class="row g-2 mb-3 bg-white p-2 rounded border" style="border-color: #c4d6ec !important;">
-                
-                <!-- Line 1: Emp Id, Name, Payl Type -->
-                <div class="col-md-3 d-flex align-items-center">
-                  <label class="fw-semibold text-dark-blue me-2 text-end" style="font-size: 11px; min-width: 60px;">Emp. Id.</label>
-                  <input type="text" class="form-control form-control-sm" value="10029" style="font-size: 11px; width: 80px;" />
-                </div>
-                <div class="col-md-5 d-flex align-items-center">
-                  <input type="text" class="form-control form-control-sm bg-light" value="ASHA TANKA VISHWAKARMA" readonly style="font-size: 11px;" />
-                </div>
-                <div class="col-md-4 d-flex align-items-center">
-                  <label class="fw-semibold text-dark-blue me-2 text-end" style="font-size: 11px; min-width: 70px;">Payl Type</label>
-                  <select class="form-select form-select-sm" style="font-size: 11px;">
-                    <option selected>Monthly</option>
-                  </select>
-                </div>
-
-                <!-- Line 2: PF, P.Tax, Value -->
-                <div class="col-md-4 d-flex align-items-center gap-1">
-                  <div class="form-check me-1">
-                    <input class="form-check-input" type="checkbox" id="chkPF" checked>
-                    <label class="form-check-label fw-semibold text-dark-blue" for="chkPF" style="font-size: 11px;">PF Applicable</label>
-                  </div>
-                  <input type="text" class="form-control form-control-sm text-center" value="12.00" style="font-size: 11px; width: 60px;" />
-                  <input type="text" class="form-control form-control-sm text-center bg-light" value="550.00" readonly style="font-size: 11px; width: 80px;" />
-                </div>
-                <div class="col-md-4 d-flex align-items-center">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="chkPTax">
-                    <label class="form-check-label fw-semibold text-dark-blue" for="chkPTax" style="font-size: 11px;">P.Tax Applicable</label>
-                  </div>
-                </div>
-                <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
-                  <input type="text" class="form-control form-control-sm bg-light text-center" value="57255" readonly style="font-size: 11px; width: 80px;" />
-                </div>
-
-                <!-- Line 3: Gratuity, Bonus -->
-                <div class="col-md-6 d-flex align-items-center gap-1">
-                  <div class="form-check me-1">
-                    <input class="form-check-input" type="checkbox" id="chkGratuity">
-                    <label class="form-check-label fw-semibold text-dark-blue" for="chkGratuity" style="font-size: 11px;">Gratuity</label>
-                  </div>
-                  <input type="text" class="form-control form-control-sm text-center" value="4.81" style="font-size: 11px; width: 50px;" />
-                  <input type="text" class="form-control form-control-sm text-center bg-light" value="264.55" readonly style="font-size: 11px; width: 70px;" />
-
-                  <div class="form-check ms-3 me-1">
-                    <input class="form-check-input" type="checkbox" id="chkBonus">
-                    <label class="form-check-label fw-semibold text-dark-blue" for="chkBonus" style="font-size: 11px;">Bonus (%)</label>
-                  </div>
-                  <input type="text" class="form-control form-control-sm text-center" value="8.33" style="font-size: 11px; width: 50px;" />
-                  <input type="text" class="form-control form-control-sm text-center bg-light" value="458.15" readonly style="font-size: 11px; width: 70px;" />
-                </div>
-              </div>
-
-              <!-- Earnings and Deductions Side-by-Side Tables -->
-              <div class="row g-2">
-                
-                <!-- Earnings Block -->
-                <div class="col-md-6">
-                  <div class="card p-2 bg-white border h-100" style="border-color: #c4d6ec !important;">
-                    <span class="col-form-label-sm fw-bold d-block mb-1 text-primary" style="font-size: 11px; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px;">Earning</span>
-                    
-                    <div class="table-responsive rounded border bg-white" style="max-height: 180px; overflow-y: auto; border-color: #cbd5e1 !important;">
-                      <table class="table table-sm table-bordered mb-0 text-center" style="font-size: 10px; vertical-align: middle;">
-                        <thead class="table-light text-primary fw-bold" style="position: sticky; top: 0; z-index: 1;">
-                          <tr>
-                            <th class="text-start">Description</th>
-                            <th style="width: 40px;">Row</th>
-                            <th style="width: 70px;">Val/Per(%)</th>
-                            <th style="width: 70px;">Rate</th>
-                            <th style="width: 70px;">Amount</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td class="text-start fw-semibold text-danger">BASIC</td>
-                            <td>1</td>
-                            <td class="fw-semibold text-danger">V</td>
-                            <td>5500.00</td>
-                            <td>5500.00</td>
-                          </tr>
-                          <tr>
-                            <td class="text-start fw-semibold">HOUSE RENT ALLOWANCE</td>
-                            <td>2</td>
-                            <td class="fw-semibold text-danger">V</td>
-                            <td>1500.00</td>
-                            <td>1500.00</td>
-                          </tr>
-                          <tr>
-                            <td class="text-start fw-semibold">MEDICAL ALLOWANCE</td>
-                            <td>3</td>
-                            <td class="fw-semibold text-danger">V</td>
-                            <td>1000.00</td>
-                            <td>1000.00</td>
-                          </tr>
-                          <tr>
-                            <td class="text-start fw-semibold">WASHING ALLOWANCE</td>
-                            <td>6</td>
-                            <td class="fw-semibold text-danger">V</td>
-                            <td>500.00</td>
-                            <td>500.00</td>
-                          </tr>
-                          <tr>
-                            <td class="text-start fw-semibold">PAPER ALLOW</td>
-                            <td>7</td>
-                            <td class="fw-semibold text-danger">V</td>
-                            <td>1000.00</td>
-                            <td>1000.00</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Deductions Block -->
-                <div class="col-md-6">
-                  <div class="card p-2 bg-white border h-100" style="border-color: #c4d6ec !important;">
-                    <span class="col-form-label-sm fw-bold d-block mb-1 text-primary" style="font-size: 11px; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px;">Deduction</span>
-                    
-                    <div class="table-responsive rounded border bg-white" style="max-height: 180px; overflow-y: auto; border-color: #cbd5e1 !important;">
-                      <table class="table table-sm table-bordered mb-0 text-center" style="font-size: 10px; vertical-align: middle;">
-                        <thead class="table-light text-primary fw-bold" style="position: sticky; top: 0; z-index: 1;">
-                          <tr>
-                            <th class="text-start">Description</th>
-                            <th style="width: 40px;">Row</th>
-                            <th style="width: 70px;">Val/Per(%)</th>
-                            <th style="width: 70px;">Rate</th>
-                            <th style="width: 70px;">Amount</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td colspan="5" class="text-muted text-center py-4">No deduction rules defined.</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-              <!-- Lower Row Parameters (Totals) -->
-              <div class="row g-2 mt-2 bg-white p-2 rounded border" style="border-color: #c4d6ec !important;">
-                <div class="col-md-2 d-flex align-items-center">
-                  <label class="fw-semibold text-dark-blue me-1 text-end" style="font-size: 10px; min-width: 50px;">Total Earn</label>
-                  <input type="text" class="form-control form-control-sm text-center bg-light" value="21100.00" readonly style="font-size: 11px;" />
-                </div>
-                <div class="col-md-2 d-flex align-items-center">
-                  <label class="fw-semibold text-dark-blue me-1 text-end" style="font-size: 10px; min-width: 50px;">Total Ded</label>
-                  <input type="text" class="form-control form-control-sm text-center bg-light" value="660.00" readonly style="font-size: 11px;" />
-                </div>
-                <div class="col-md-2 d-flex align-items-center">
-                  <label class="fw-semibold text-dark-blue me-1 text-end" style="font-size: 10px; min-width: 55px;">Net Amount</label>
-                  <input type="text" class="form-control form-control-sm text-center bg-light" value="20440.00" readonly style="font-size: 11px;" />
-                </div>
-                <div class="col-md-3 d-flex align-items-center">
-                  <label class="fw-semibold text-dark-blue me-1 text-end" style="font-size: 10px; min-width: 60px;">Employer PF</label>
-                  <input type="text" class="form-control form-control-sm text-center bg-light" value="12.00" readonly style="font-size: 11px;" />
-                </div>
-                <div class="col-md-3 d-flex align-items-center">
-                  <label class="fw-semibold text-dark-blue me-1 text-end" style="font-size: 10px; min-width: 60px;">Act Wage</label>
-                  <input type="text" class="form-control form-control-sm text-center bg-light" value="21822.70" readonly style="font-size: 11px;" />
-                </div>
-              </div>
-
+          <!-- Top fields row -->
+          <div class="row g-2 mb-2 align-items-center">
+            <!-- Line 1: Emp. Id and Name -->
+            <div class="col-md-3 d-flex align-items-center">
+              <label class="fw-semibold text-dark-blue me-2 text-end" style="font-size: 11px; min-width: 60px;">Emp. Id.</label>
+              <input type="text" class="form-control form-control-sm border-secondary text-center" value="10029" style="font-size: 11px; width: 80px;" />
+            </div>
+            <div class="col-md-9">
+              <input type="text" class="form-control form-control-sm bg-white border-secondary fw-semibold text-dark" value="ASHA TANKA VISHWAKARMA" readonly style="font-size: 11px;" />
             </div>
           </div>
+
+          <div class="row g-2 mb-2 align-items-center">
+            <!-- Line 2: Payl Type, PF Applicable, P.Tax Applicable -->
+            <div class="col-md-3 d-flex align-items-center">
+              <label class="fw-semibold text-dark-blue me-2 text-end" style="font-size: 11px; min-width: 60px;">Payl Type :</label>
+              <select class="form-select form-select-sm border-secondary" style="font-size: 11px;">
+                <option selected>Daily</option>
+                <option>Monthly</option>
+              </select>
+            </div>
+            <div class="col-md-5 d-flex align-items-center gap-1">
+              <div class="form-check me-1">
+                <input class="form-check-input border-secondary" type="checkbox" id="chkPF">
+                <label class="form-check-label fw-semibold text-dark-blue" for="chkPF" style="font-size: 11px; white-space: nowrap;">PF Applicable</label>
+              </div>
+              <input type="text" class="form-control form-control-sm text-center border-secondary" value="0.00" style="font-size: 11px; width: 60px;" />
+              <input type="text" class="form-control form-control-sm text-center bg-white border-secondary" value="0.00" style="font-size: 11px; width: 60px;" />
+            </div>
+            <div class="col-md-4 d-flex align-items-center gap-2 justify-content-end">
+              <div class="form-check">
+                <input class="form-check-input border-secondary" type="checkbox" id="chkPTax" checked>
+                <label class="form-check-label fw-semibold text-dark-blue" for="chkPTax" style="font-size: 11px; white-space: nowrap;">P.Tax Applicable</label>
+              </div>
+              <input type="text" class="form-control form-control-sm text-center bg-white border-secondary" value="0.00" readonly style="font-size: 11px; width: 60px;" />
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3 align-items-center">
+            <!-- Line 3: Gratuity, Bonus -->
+            <div class="col-md-4 d-flex align-items-center">
+              <label class="fw-semibold text-dark-blue me-2 text-end" style="font-size: 11px; min-width: 60px;">Gratuity</label>
+              <input type="text" class="form-control form-control-sm text-center border-secondary" value="0.00" style="font-size: 11px; width: 80px;" />
+            </div>
+            <div class="col-md-4 d-flex align-items-center">
+              <label class="fw-semibold text-dark-blue me-2 text-end" style="font-size: 11px; min-width: 80px;">Bonus (%)</label>
+              <input type="text" class="form-control form-control-sm text-center border-secondary" value="0.00" style="font-size: 11px; width: 80px;" />
+            </div>
+          </div>
+
+          <!-- Earnings and Deductions Vertically Stacked Tables -->
+          <div class="row g-2 mb-3">
+            
+            <!-- Earnings Block -->
+            <div class="col-12">
+              <div class="card p-2 border shadow-xs" style="border-color: #9ca3af !important; background-color: #cbd2f6 !important;">
+                <span class="col-form-label-sm fw-bold d-block mb-1 text-dark" style="font-size: 11px; border-bottom: 1px solid #9ca3af; padding-bottom: 2px;">Earning</span>
+                
+                <div class="table-responsive rounded border bg-secondary" style="max-height: 180px; overflow-y: auto; border-color: #9ca3af !important;">
+                  <table class="table table-sm table-bordered mb-0 text-center text-dark font-monospace" style="font-size: 11px; vertical-align: middle; background-color: #a0a0a0 !important;">
+                    <thead class="table-light fw-bold" style="position: sticky; top: 0; z-index: 1; background-color: #d1d5db !important;">
+                      <tr class="border-secondary text-dark">
+                        <th class="text-start border-secondary">Description</th>
+                        <th style="width: 40px;" class="border-secondary">Row</th>
+                        <th style="width: 85px;" class="border-secondary">Val/Per(%)</th>
+                        <th style="width: 70px;" class="border-secondary">Rate</th>
+                        <th style="width: 70px;" class="border-secondary">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="border-secondary">
+                        <td class="text-start border-secondary bg-white">BASIC</td>
+                        <td class="border-secondary bg-white">0</td>
+                        <td class="border-secondary text-white font-weight-bold" style="background-color: #a61c1c !important;">V</td>
+                        <td class="border-secondary bg-white">0.00</td>
+                        <td class="border-secondary bg-white">0.00</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Deductions Block -->
+            <div class="col-12">
+              <div class="card p-2 border shadow-xs" style="border-color: #9ca3af !important; background-color: #cbd2f6 !important;">
+                <span class="col-form-label-sm fw-bold d-block mb-1 text-dark" style="font-size: 11px; border-bottom: 1px solid #9ca3af; padding-bottom: 2px;">Deduction</span>
+                
+                <div class="table-responsive rounded border bg-secondary" style="max-height: 180px; overflow-y: auto; border-color: #9ca3af !important;">
+                  <table class="table table-sm table-bordered mb-0 text-center text-dark font-monospace" style="font-size: 11px; vertical-align: middle; background-color: #a0a0a0 !important;">
+                    <thead class="table-light fw-bold" style="position: sticky; top: 0; z-index: 1; background-color: #d1d5db !important;">
+                      <tr class="border-secondary text-dark">
+                        <th class="text-start border-secondary">Description</th>
+                        <th style="width: 40px;" class="border-secondary">Row</th>
+                        <th style="width: 85px;" class="border-secondary">Val/Per(%)</th>
+                        <th style="width: 70px;" class="border-secondary">Rate</th>
+                        <th style="width: 70px;" class="border-secondary">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="border-secondary">
+                        <td class="text-start border-secondary bg-white">PROFESSIONAL TAX</td>
+                        <td class="border-secondary bg-white">0</td>
+                        <td class="border-secondary text-white font-weight-bold" style="background-color: #a61c1c !important;">V</td>
+                        <td class="border-secondary bg-white">0.00</td>
+                        <td class="border-secondary bg-white">0.00</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Lower Row Parameters (Totals) -->
+          <div class="row g-1 align-items-center">
+            <div class="col-md-2.4 d-flex align-items-center col">
+              <label class="fw-semibold text-dark-blue me-1 text-end" style="font-size: 10px; min-width: 55px; white-space: nowrap;">Total Earn</label>
+              <input type="text" class="form-control form-control-sm text-center border-secondary bg-white" value="0.00" style="font-size: 11px;" />
+            </div>
+            <div class="col-md-2.4 d-flex align-items-center col">
+              <label class="fw-semibold text-dark-blue me-1 text-end" style="font-size: 10px; min-width: 55px; white-space: nowrap;">Total Ded</label>
+              <input type="text" class="form-control form-control-sm text-center border-secondary bg-white" value="0.00" style="font-size: 11px;" />
+            </div>
+            <div class="col-md-2.4 d-flex align-items-center col">
+              <label class="fw-semibold text-dark-blue me-1 text-end" style="font-size: 10px; min-width: 60px; white-space: nowrap;">Net Amount</label>
+              <input type="text" class="form-control form-control-sm text-center border-secondary bg-white" value="0.00" style="font-size: 11px;" />
+            </div>
+            <div class="col-md-2.4 d-flex align-items-center col">
+              <label class="fw-semibold text-dark-blue me-1 text-end" style="font-size: 10px; min-width: 65px; white-space: nowrap;">Employer PF</label>
+              <input type="text" class="form-control form-control-sm text-center border-secondary bg-white" value="0.00" style="font-size: 11px;" />
+            </div>
+            <div class="col-md-2.4 d-flex align-items-center col">
+              <label class="fw-semibold text-dark-blue me-1 text-end" style="font-size: 10px; min-width: 55px; white-space: nowrap;">Act Wage</label>
+              <input type="text" class="form-control form-control-sm text-center border-secondary bg-white" value="0.00" style="font-size: 11px;" />
+            </div>
+          </div>
+
         </fieldset>
       </form>
     </div>
 
-    <!-- Bottom Action Toolbar / Footer Buttons -->
-    <div class="card-footer bg-light border-top p-2 px-3">
+    <!-- Bottom Action Toolbar / Footer Buttons styled in classic desktop layout -->
+    <div class="card-footer p-2 px-3 border-top" style="background-color: #cbd2f6 !important; border-color: #9ca3af !important;">
       <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center">
-        <!-- Left Side: Buttons + Slider Navigation -->
+        <!-- Left Side: Buttons (Stack Style) -->
         <div class="d-flex flex-wrap gap-1 align-items-center bg-white p-1 rounded border shadow-xs"
-          style="border-color: #c9c8cc !important;">
-          <button type="button" id="btnAdd" class="btn btn-xs btn-outline-secondary px-2 py-1"
-            style="font-size: 11px; height: 26px; border-color: #a3b8cc !important;"><i
-              class="ti ti-plus me-1 text-success"></i>Add</button>
-          <button type="button" id="btnEdit" class="btn btn-xs btn-outline-secondary px-2 py-1"
-            style="font-size: 11px; height: 26px; border-color: #a3b8cc !important;"><i
-              class="ti ti-edit me-1 text-warning"></i>Edit</button>
-          <button type="button" id="btnDelete" class="btn btn-xs btn-outline-secondary px-2 py-1"
-            style="font-size: 11px; height: 26px; border-color: #a3b8cc !important;"><i
-              class="ti ti-trash me-1 text-danger"></i>Delete</button>
-          <button type="button" id="btnSave" class="btn btn-xs btn-outline-secondary px-2 py-1"
-            style="font-size: 11px; height: 26px; border-color: #a3b8cc !important;"><i
-              class="ti ti-device-floppy me-1 text-primary"></i>Save</button>
-          <button type="button" id="btnCancel" class="btn btn-xs btn-outline-secondary px-2 py-1"
-            style="font-size: 11px; height: 26px; border-color: #a3b8cc !important;"><i
-              class="ti ti-refresh me-1 text-secondary"></i>Cancel</button>
-          <button type="button" id="btnExit" class="btn btn-xs btn-outline-secondary px-2 py-1"
-            style="font-size: 11px; height: 26px; border-color: #a3b8cc !important;"><i
-              class="ti ti-logout me-1 text-danger"></i>Exit</button>
-          <button type="button" id="btnSearch" class="btn btn-xs btn-outline-secondary px-2 py-1"
-            style="font-size: 11px; height: 26px; border-color: #a3b8cc !important;"><i
-              class="ti ti-search me-1 text-info"></i>Search</button>
-          <button type="button" id="btnPrint" class="btn btn-xs btn-outline-secondary px-2 py-1"
-            style="font-size: 11px; height: 26px; border-color: #a3b8cc !important;"><i
-              class="ti ti-printer me-1 text-dark"></i>Print</button>
+          style="border-color: #9ca3af !important;">
+          
+          <button type="button" id="btnAdd" class="btn btn-outline-secondary d-flex flex-column align-items-center justify-content-center p-1"
+            style="font-size: 11px; font-weight: bold; width: 62px; height: 50px; border-color: #9ca3af !important; color: #000 !important; background-color: #f3f4f6;">
+            <i class="ti ti-plus text-success mb-1" style="font-size: 18px;"></i>Add
+          </button>
+          
+          <button type="button" id="btnEdit" class="btn btn-outline-secondary d-flex flex-column align-items-center justify-content-center p-1"
+            style="font-size: 11px; font-weight: bold; width: 62px; height: 50px; border-color: #9ca3af !important; color: #000 !important; background-color: #f3f4f6;">
+            <i class="ti ti-edit text-warning mb-1" style="font-size: 18px;"></i>Edit
+          </button>
+          
+          <button type="button" id="btnDelete" class="btn btn-outline-secondary d-flex flex-column align-items-center justify-content-center p-1"
+            style="font-size: 11px; font-weight: bold; width: 62px; height: 50px; border-color: #9ca3af !important; color: #000 !important; background-color: #f3f4f6;">
+            <i class="ti ti-trash text-danger mb-1" style="font-size: 18px;"></i>Delete
+          </button>
+          
+          <button type="button" id="btnSave" class="btn btn-outline-secondary d-flex flex-column align-items-center justify-content-center p-1"
+            style="font-size: 11px; font-weight: bold; width: 62px; height: 50px; border-color: #9ca3af !important; color: #000 !important; background-color: #f3f4f6;">
+            <i class="ti ti-device-floppy text-primary mb-1" style="font-size: 18px;"></i>Save
+          </button>
+          
+          <button type="button" id="btnCancel" class="btn btn-outline-secondary d-flex flex-column align-items-center justify-content-center p-1"
+            style="font-size: 11px; font-weight: bold; width: 62px; height: 50px; border-color: #9ca3af !important; color: #000 !important; background-color: #f3f4f6;">
+            <i class="ti ti-refresh text-secondary mb-1" style="font-size: 18px;"></i>Cancel
+          </button>
+          
+          <button type="button" id="btnExit" class="btn btn-outline-secondary d-flex flex-column align-items-center justify-content-center p-1"
+            style="font-size: 11px; font-weight: bold; width: 62px; height: 50px; border-color: #9ca3af !important; color: #000 !important; background-color: #f3f4f6;">
+            <i class="ti ti-square-x text-danger mb-1" style="font-size: 18px;"></i>Exit
+          </button>
+          
+          <button type="button" id="btnSearch" class="btn btn-outline-secondary d-flex flex-column align-items-center justify-content-center p-1"
+            style="font-size: 11px; font-weight: bold; width: 62px; height: 50px; border-color: #9ca3af !important; color: #000 !important; background-color: #f3f4f6;">
+            <i class="ti ti-search text-info mb-1" style="font-size: 18px;"></i>Search
+          </button>
+          
+          <button type="button" id="btnPrint" class="btn btn-outline-secondary d-flex flex-column align-items-center justify-content-center p-1"
+            style="font-size: 11px; font-weight: bold; width: 62px; height: 50px; border-color: #9ca3af !important; color: #000 !important; background-color: #f3f4f6;">
+            <i class="ti ti-printer text-dark mb-1" style="font-size: 18px;"></i>Print
+          </button>
+
         </div>
 
         <!-- Right Side: Record Navigation Slider (Legacy style) -->
         <div class="d-flex align-items-center bg-white p-1 rounded border shadow-xs"
-          style="border-color: #c9c8cc !important; font-size: 11px; height: 26px;">
-          <span id="navLabel" class="px-2 fw-bold border-end me-2"
-            style="min-width: 50px; text-align: center; white-space: nowrap;">26 / 26</span>
+          style="border-color: #9ca3af !important; font-size: 11px; height: 50px;">
+          <span class="px-2 fw-bold me-2 text-dark">NEW</span>
+          <span id="navLabel" class="px-2 fw-bold border-end border-start me-2"
+            style="min-width: 50px; text-align: center; white-space: nowrap;">0 / 0</span>
           <button type="button" id="btnPrev" class="btn btn-xs btn-outline-secondary px-2 py-0"
-            style="font-size: 11px; line-height: 1.2; border-color: #a3b8cc !important; height: 20px; font-weight: bold; background-color: #f8f9fa;">&lt;</button>
-          <input type="range" id="rangeSlider" class="form-range mx-2" min="0" max="25" value="25"
+            style="font-size: 11px; line-height: 1.2; border-color: #9ca3af !important; height: 26px; font-weight: bold; background-color: #f8f9fa;">&lt;</button>
+          <input type="range" id="rangeSlider" class="form-range mx-2" min="0" max="0" value="0"
             style="height: 4px; flex-grow: 1; min-width: 120px;" />
           <button type="button" id="btnNext" class="btn btn-xs btn-outline-secondary px-2 py-0"
-            style="font-size: 11px; line-height: 1.2; border-color: #a3b8cc !important; height: 20px; font-weight: bold; background-color: #f8f9fa;">&gt;</button>
+            style="font-size: 11px; line-height: 1.2; border-color: #9ca3af !important; height: 26px; font-weight: bold; background-color: #f8f9fa;">&gt;</button>
         </div>
       </div>
     </div>
@@ -269,12 +247,12 @@ include 'header.php';
 <style>
   /* Light blue background for the tab content window */
   .bg-legacy-blue {
-    background-color: #e8f0fe !important;
-    border-color: #a3b8cc !important;
+    background-color: #e5e7eb !important;
+    border-color: #9ca3af !important;
   }
 
   .text-dark-blue {
-    color: #135ca3 !important;
+    color: #111827 !important;
   }
 
   /* Make inputs have classical blue borders */
@@ -347,18 +325,18 @@ include 'header.php';
 
     dragElement(card);
 
-    // Esc key press redirects to index
+    // Esc key press redirects to employee-master
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        window.location.href = 'index';
+        window.location.href = 'employee-master.php';
       }
     });
 
-    // Exit button click redirects to index
+    // Exit button click redirects to employee-master
     const btnExit = document.getElementById("btnExit");
     if (btnExit) {
       btnExit.addEventListener('click', () => {
-        window.location.href = 'index';
+        window.location.href = 'employee-master.php';
       });
     }
   });

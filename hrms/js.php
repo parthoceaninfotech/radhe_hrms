@@ -20,5 +20,12 @@
 <!-- Page JS -->
 
 <script>
-
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnExit = document.getElementById("btnExit");
+    if (btnExit) {
+      btnExit.addEventListener('click', () => {
+        window.location.href = 'exit.php';
+      });
+    }
+  });
 </script>

@@ -16,11 +16,13 @@ include 'header.php';
       <h6 class="m-0 text-white fw-bold d-flex align-items-center" style="font-size: 14px;">
         <i class="ti ti-id me-2" style="font-size: 16px;"></i>DESIGNATION MASTER INFORMATION
       </h6>
-      <span class="badge bg-danger px-2 py-1" style="font-size: 10px; font-weight: 600;"># Press [F5] For List, [Esc] For Cancel</span>
+      <span class="badge bg-danger px-2 py-1" style="font-size: 10px; font-weight: 600;"># Press [F5] For List, [Esc]
+        For Cancel</span>
     </div>
 
     <div class="card-body p-3 bg-white">
       <form id="designationMasterForm">
+        <input type="hidden" name="id" id="desig_db_id" value="0">
         <!-- Classic Group Box using Fieldset/Legend -->
         <fieldset class="border p-3 rounded mb-2" style="border-color: #a3b8cc !important;">
           <legend class="float-none w-auto px-2 fw-bold text-primary" style="font-size: 12px; margin-bottom: 0;">
@@ -103,11 +105,11 @@ include 'header.php';
         <div class="d-flex align-items-center bg-white p-1 rounded border shadow-xs"
           style="border-color: #c9c8cc !important; font-size: 11px; height: 26px;">
           <span id="navLabel" class="px-2 fw-bold border-end me-2"
-            style="min-width: 50px; text-align: center; white-space: nowrap;">27 / 27</span>
+            style="min-width: 50px; text-align: center; white-space: nowrap;">0 / 0</span>
           <button type="button" id="btnPrev" class="btn btn-xs btn-outline-secondary px-2 py-0"
             style="font-size: 11px; line-height: 1.2; border-color: #a3b8cc !important; height: 20px; font-weight: bold; background-color: #f8f9fa;">&lt;</button>
-          <input type="range" id="rangeSlider" class="form-range mx-2" min="0" max="26" value="26"
-            style="height: 4px; flex-grow: 1; min-width: 120px;" />
+          <input type="range" id="rangeSlider" class="form-range mx-2" min="0" max="0" value="0"
+            style="height: 4px; flex-grow: 1; min-width: 120px;" disabled />
           <button type="button" id="btnNext" class="btn btn-xs btn-outline-secondary px-2 py-0"
             style="font-size: 11px; line-height: 1.2; border-color: #a3b8cc !important; height: 20px; font-weight: bold; background-color: #f8f9fa;">&gt;</button>
         </div>
@@ -187,20 +189,229 @@ include 'header.php';
 
     dragElement(card);
 
-    // Esc key press redirects to index
+    // Esc key press handling
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        window.location.href = 'index';
+        if (currentMode !== 'view') {
+          cancelAction();
+        } else {
+          window.location.href = 'index?change_company=1';
+        }
       }
     });
 
-    // Exit button click redirects to index
-    const btnExit = document.getElementById("btnExit");
-    if (btnExit) {
-      btnExit.addEventListener('click', () => {
-        window.location.href = 'index';
-      });
+    // CRUD AJAX LOGIC
+    let desigRecords = [];
+    let currentIndex = -1;
+    let currentMode = 'view'; // 'view', 'add', 'edit'
+    let desigSelectModalInstance = null;
+
+    const form = document.getElementById("designationMasterForm");
+    const formElements = form.querySelectorAll("input, select");
+
+    // Load records initially
+    fetchRecords();
+
+    function fetchRecords(showModal = false) {
+      fetch('actions/designation-master-action.php?action=view')
+        .then(res => res.json())
+        .then(response => {
+          if (response.status === 'success') {
+            desigRecords = response.data;
+            if (desigRecords.length > 0) {
+              if (currentIndex === -1 || currentIndex >= desigRecords.length) {
+                currentIndex = 0;
+              }
+              displayRecord(currentIndex);
+
+              if (showModal) {
+                populateModalAndShow();
+              }
+            } else {
+              currentIndex = -1;
+              clearForm();
+
+              // Reset navigation UI for 0 records
+              document.getElementById("navLabel").innerText = "0 / 0";
+              const slider = document.getElementById("rangeSlider");
+              slider.max = 0;
+              slider.value = 0;
+              slider.disabled = true;
+
+              setMode('add');
+            }
+          }
+        })
+        .catch(err => console.error("Error fetching records: ", err));
     }
+
+    function populateModalAndShow() {
+      const selectBody = document.getElementById("desigSelectBody");
+      selectBody.innerHTML = "";
+      desigRecords.forEach((rec, idx) => {
+        const tr = document.createElement("tr");
+        tr.style.cursor = "pointer";
+        tr.innerHTML = `<td><strong>${rec.desig_code || ''}</strong></td><td>${rec.desig_name || ''}</td>`;
+        tr.addEventListener('click', () => {
+          currentIndex = idx;
+          displayRecord(currentIndex);
+          if (desigSelectModalInstance) {
+            desigSelectModalInstance.hide();
+          }
+        });
+        selectBody.appendChild(tr);
+      });
+
+      if (!desigSelectModalInstance) {
+        desigSelectModalInstance = new bootstrap.Modal(document.getElementById("desigSelectModal"));
+      }
+      desigSelectModalInstance.show();
+    }
+
+    function displayRecord(index) {
+      if (index < 0 || index >= desigRecords.length) return;
+      const record = desigRecords[index];
+      document.getElementById("desig_db_id").value = record.id;
+      document.getElementById("desig_id").value = record.desig_code || '';
+      document.getElementById("desig_desc").value = record.desig_name || '';
+
+      document.getElementById("navLabel").innerText = (index + 1) + " / " + desigRecords.length;
+
+      const slider = document.getElementById("rangeSlider");
+      slider.max = desigRecords.length - 1;
+      slider.value = index;
+      slider.disabled = desigRecords.length <= 1;
+
+      setMode('view');
+    }
+
+    function clearForm() {
+      document.getElementById("desig_db_id").value = "0";
+      document.getElementById("desig_id").value = "";
+      document.getElementById("desig_desc").value = "";
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      if (mode === 'view') {
+        formElements.forEach(el => el.disabled = true);
+        document.getElementById("btnAdd").disabled = false;
+        document.getElementById("btnEdit").disabled = desigRecords.length === 0;
+        document.getElementById("btnDelete").disabled = desigRecords.length === 0;
+        document.getElementById("btnSave").disabled = true;
+        document.getElementById("btnCancel").disabled = true;
+        document.getElementById("btnSearch").disabled = false;
+        document.getElementById("rangeSlider").disabled = desigRecords.length <= 1;
+        document.getElementById("btnPrev").disabled = desigRecords.length <= 1 || currentIndex <= 0;
+        document.getElementById("btnNext").disabled = desigRecords.length <= 1 || currentIndex >= desigRecords.length - 1;
+      } else if (mode === 'add' || mode === 'edit') {
+        formElements.forEach(el => el.disabled = false);
+        document.getElementById("btnAdd").disabled = true;
+        document.getElementById("btnEdit").disabled = true;
+        document.getElementById("btnDelete").disabled = true;
+        document.getElementById("btnSave").disabled = false;
+        document.getElementById("btnCancel").disabled = false;
+        document.getElementById("btnSearch").disabled = true;
+        document.getElementById("rangeSlider").disabled = true;
+        document.getElementById("btnPrev").disabled = true;
+        document.getElementById("btnNext").disabled = true;
+
+        if (mode === 'add') {
+          clearForm();
+          fetch('actions/designation-master-action.php?action=next_code')
+            .then(res => res.json())
+            .then(data => {
+              if (data.status === 'success') {
+                document.getElementById("desig_id").value = data.next_code;
+              }
+            });
+        }
+      }
+    }
+
+    // Cancel edit or add
+    function cancelAction() {
+      if (desigRecords.length > 0) {
+        if (currentIndex === -1) currentIndex = 0;
+        displayRecord(currentIndex);
+      } else {
+        clearForm();
+        setMode('add');
+      }
+    }
+
+    // Button Listeners
+    document.getElementById("btnAdd").addEventListener('click', () => setMode('add'));
+    document.getElementById("btnEdit").addEventListener('click', () => setMode('edit'));
+    document.getElementById("btnCancel").addEventListener('click', cancelAction);
+    document.getElementById("btnSearch").addEventListener('click', () => {
+      fetchRecords(true);
+    });
+
+    document.getElementById("btnDelete").addEventListener('click', () => {
+      const id = document.getElementById("desig_db_id").value;
+      if (id > 0 && confirm("Are you sure you want to delete this designation?")) {
+        fetch(`actions/designation-master-action.php?action=delete&id=${id}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.status === 'success') {
+              currentIndex = 0;
+              fetchRecords();
+            } else {
+              alert(data.message);
+            }
+          });
+      }
+    });
+
+    document.getElementById("btnSave").addEventListener('click', () => {
+      const formData = new FormData(form);
+      fetch('actions/designation-master-action.php?action=save', {
+        method: 'POST',
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            if (currentMode === 'add' && data.insert_id) {
+              fetch('actions/designation-master-action.php?action=view')
+                .then(res => res.json())
+                .then(response => {
+                  if (response.status === 'success') {
+                    desigRecords = response.data;
+                    currentIndex = desigRecords.findIndex(r => r.id == data.insert_id);
+                    displayRecord(currentIndex);
+                  }
+                });
+            } else {
+              fetchRecords();
+            }
+          } else {
+            alert(data.message);
+          }
+        });
+    });
+
+    // Navigation Buttons
+    document.getElementById("btnPrev").addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        displayRecord(currentIndex);
+      }
+    });
+
+    document.getElementById("btnNext").addEventListener('click', () => {
+      if (currentIndex < desigRecords.length - 1) {
+        currentIndex++;
+        displayRecord(currentIndex);
+      }
+    });
+
+    // Slider
+    document.getElementById("rangeSlider").addEventListener('input', (e) => {
+      currentIndex = parseInt(e.target.value);
+      displayRecord(currentIndex);
+    });
   });
 
   // Simple Draggable Functionality
@@ -240,6 +451,41 @@ include 'header.php';
     }
   }
 </script>
+
+<!-- Designation Selection Modal -->
+<div class="modal fade" id="desigSelectModal" tabindex="-1" data-bs-backdrop="static"
+  aria-labelledby="desigSelectModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md modal-dialog-centered">
+    <div class="modal-content border shadow-lg"
+      style="border-radius: 6px !important; border-color: #a3b8cc !important;">
+      <div class="modal-header text-white p-2 px-3"
+        style="background: linear-gradient(90deg, #135ca3 0%, #00a2e8 100%); border-top-left-radius: 5px !important; border-top-right-radius: 5px !important; border-bottom: 1px solid #104f9b;">
+        <h6 class="modal-title fw-bold text-white d-flex align-items-center" id="desigSelectModalLabel"
+          style="font-size: 13px; margin: 0;">
+          <i class="ti ti-building me-2" style="font-size: 15px;"></i>Select Designation
+        </h6>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+          style="font-size: 10px;"></button>
+      </div>
+      <div class="modal-body p-3" style="background-color: #e8f0fe !important;">
+        <div class="table-responsive bg-white rounded p-2 border"
+          style="max-height: 300px; overflow-y: auto; border-color: #a3b8cc !important;">
+          <table class="table table-sm table-striped table-bordered table-hover mb-0" style="font-size: 11px;">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 80px;">Code</th>
+                <th>Designation Name</th>
+              </tr>
+            </thead>
+            <tbody id="desigSelectBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <?php
 include 'footer.php';

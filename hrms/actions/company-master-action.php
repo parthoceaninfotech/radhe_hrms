@@ -227,6 +227,9 @@ if ($action === 'view') {
 
             $result = $ai_db->aiQuery($sql);
             if ($result) {
+                if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_company_id']) === $id) {
+                    $_SESSION['selected_company_name'] = $company_name;
+                }
                 echo json_encode(['status' => 'success', 'message' => 'Company details updated successfully.']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Failed to update company details.']);
@@ -261,6 +264,7 @@ if ($action === 'view') {
             if ($result) {
                 $new_id = $ai_db->aiLastInsert();
                 $_SESSION['selected_company_id'] = $new_id;
+                $_SESSION['selected_company_name'] = $company_name;
                 echo json_encode(['status' => 'success', 'message' => 'Company created successfully.', 'insert_id' => $new_id]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Failed to create company.']);
@@ -275,6 +279,10 @@ if ($action === 'view') {
     if ($id > 0) {
         $result = $ai_db->aiQuery("DELETE FROM hrms_companies WHERE id = $id");
         if ($result) {
+            if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_company_id']) === $id) {
+                unset($_SESSION['selected_company_id']);
+                unset($_SESSION['selected_company_name']);
+            }
             echo json_encode(['status' => 'success', 'message' => 'Company record deleted successfully.']);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Failed to delete company record.']);

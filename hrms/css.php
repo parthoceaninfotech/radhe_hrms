@@ -41,6 +41,14 @@
     background-attachment: fixed !important;
   }
 
+  /* Make sure all draggable cards hover ON TOP of menus and status bars */
+  #draggableCard,
+  #branchCard,
+  #employerCard,
+  #searchCard {
+    z-index: 1100 !important;
+  }
+
   .layout-wrapper,
   .layout-container,
   .content-wrapper {
@@ -82,7 +90,7 @@
   }
 
   .app-brand-text {
-    font-size: 13px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     text-transform: none !important;
     white-space: nowrap !important;
@@ -98,7 +106,7 @@
     border: 1px solid #dbdade !important;
     border-radius: 6px !important;
     color: #5d596c !important;
-    font-size: 12px !important;
+    font-size: 13px !important;
     font-weight: 500 !important;
     transition: all 0.2s ease-in-out !important;
     height: auto !important;
@@ -125,6 +133,7 @@
       height: auto !important;
       min-height: auto !important;
       top: 28px !important;
+      z-index: 999 !important;
     }
 
     #layout-menu.menu-horizontal .container-fluid {
@@ -172,6 +181,8 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
     margin-top: -4px !important;
     min-width: 260px !important;
+    z-index: 9999 !important;
+    overflow: visible !important;
   }
 
   /* Prevent submenu items from inheriting flex-grow / centering */
@@ -194,11 +205,11 @@
     background: transparent !important;
     border: none !important;
     border-radius: 4px !important;
-    padding: 2px 8px !important;
+    padding: 4px 8px !important;
     margin: 0 !important;
     line-height: 1.3 !important;
     color: #5d596c !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 400 !important;
     box-shadow: none !important;
     height: auto !important;
