@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
-if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_company_id']) > 0) {
+if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_company_id']) > 0 && !isset($_GET['change_company'])) {
   header("Location: company-master.php");
   exit;
 }

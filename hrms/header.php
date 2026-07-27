@@ -7,6 +7,17 @@ if (!isset($_SESSION['id']) || $_SESSION['id'] == '') {
   exit;
 }
 $current_page = basename($_SERVER['PHP_SELF']);
+
+if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_company_id']) > 0) {
+  if (!isset($_SESSION['selected_company_name'])) {
+    require_once __DIR__ . '/root/config.php';
+    global $ai_db;
+    $comp_res = $ai_db->aiGetQuery("SELECT company_name FROM hrms_companies WHERE id = " . intval($_SESSION['selected_company_id']));
+    if (count($comp_res) > 0) {
+      $_SESSION['selected_company_name'] = $comp_res[0]['company_name'];
+    }
+  }
+}
 ?>
 <!doctype html>
 
@@ -53,6 +64,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
           </div>
 
           <div class="d-flex align-items-center ms-auto me-3">
+            <?php if (isset($_SESSION['selected_company_name']) && $_SESSION['selected_company_name'] !== ''): ?>
+              <span class="badge bg-white text-success p-2 me-2"
+                style="font-size: 12px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <i class="ti ti-building me-1" style="font-size: 14px; vertical-align: middle;"></i>
+                Company:
+                <?php echo htmlspecialchars($_SESSION['selected_company_name']); ?>
+              </span>
+            <?php endif; ?>
             <span class="badge bg-white text-primary p-2"
               style="font-size: 12px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
               <i class="ti ti-user me-1" style="font-size: 14px; vertical-align: middle;"></i>

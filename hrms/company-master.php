@@ -1398,7 +1398,7 @@ include 'header.php';
           if (currentMode !== 'view') {
             cancelAction();
           } else {
-            window.location.href = 'index';
+            window.location.href = 'index?change_company=1';
           }
         }
       }
@@ -1408,7 +1408,7 @@ include 'header.php';
     const btnExit = document.getElementById("btnExit");
     if (btnExit) {
       btnExit.addEventListener('click', () => {
-        window.location.href = 'index';
+        window.location.href = 'index?change_company=1';
       });
     }
 
