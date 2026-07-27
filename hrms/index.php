@@ -1,4 +1,11 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_company_id']) > 0) {
+  header("Location: company-master.php");
+  exit;
+}
 $pageTitle = "Home - Payroll System";
 include 'header.php';
 ?>
