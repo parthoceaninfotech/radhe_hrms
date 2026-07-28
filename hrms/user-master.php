@@ -8,7 +8,7 @@ include 'header.php';
 
   <!-- Draggable Floating Dialog Card -->
   <div id="draggableCard" class="card shadow-lg border-1"
-    style="max-width: 800px; width: 100%; border-radius: 8px !important; border: 1px solid #c9c8cc !important; background-color: #ffffff; position: absolute; opacity: 0; transition: opacity 0.15s ease-in-out; z-index: 10;">
+    style="max-width: 800px; width: 100%; border-radius: 8px !important; border: 1px solid #c9c8cc !important; background-color: #ffffff; position: absolute; opacity: 0; transition: opacity 0.15s ease-in-out; z-index: 1;">
 
     <!-- Dialog Header (Acts as Drag Handle) -->
     <div class="card-header p-2 px-3 text-white d-flex align-items-center justify-content-between"
@@ -439,9 +439,7 @@ include 'header.php';
     if (btnSearch) {
       btnSearch.addEventListener('click', () => {
         if (!userSearchModalInstance) {
-          const modalEl = document.getElementById("userSearchModal");
-          document.body.appendChild(modalEl);
-          userSearchModalInstance = new bootstrap.Modal(modalEl);
+          userSearchModalInstance = new bootstrap.Modal(document.getElementById("userSearchModal"));
         }
         renderSearchTable();
         document.getElementById("userSearchInput").value = "";

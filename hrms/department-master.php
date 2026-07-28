@@ -8,7 +8,7 @@ include 'header.php';
 
   <!-- Draggable Floating Dialog Card -->
   <div id="draggableCard" class="card shadow-lg border-1"
-    style="max-width: 750px; width: 100%; border-radius: 8px !important; border: 1px solid #c9c8cc !important; background-color: #ffffff; position: absolute; opacity: 0; transition: opacity 0.15s ease-in-out; z-index: 10;">
+    style="max-width: 750px; width: 100%; border-radius: 8px !important; border: 1px solid #c9c8cc !important; background-color: #ffffff; position: absolute; opacity: 0; transition: opacity 0.15s ease-in-out; z-index: 1;">
 
     <!-- Dialog Header (Acts as Drag Handle) -->
     <div class="card-header p-2 px-3 text-white d-flex align-items-center justify-content-between"
@@ -263,9 +263,7 @@ include 'header.php';
       });
 
       if (!deptSelectModalInstance) {
-        const modalEl = document.getElementById("deptSelectModal");
-        document.body.appendChild(modalEl);
-        deptSelectModalInstance = new bootstrap.Modal(modalEl);
+        deptSelectModalInstance = new bootstrap.Modal(document.getElementById("deptSelectModal"));
       }
       deptSelectModalInstance.show();
     }
