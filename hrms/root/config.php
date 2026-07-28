@@ -3,8 +3,9 @@
 /*
  File = config.php
  Date = 03-11-2025 */
-// session start
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 error_reporting(E_ALL);
 // website full url
 define('APP_NAME', 'Radhe HRMS ');

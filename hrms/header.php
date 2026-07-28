@@ -166,8 +166,8 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                       </a>
                     </li>
                     <li
-                      class="menu-item menu-divider-bottom <?php echo ($current_page == 'employee-per-hour-rate.php') ? 'active' : ''; ?>">
-                      <a href="#" class="menu-link">
+                      class="menu-item menu-divider-bottom <?php echo ($current_page == 'employee-hour-rate-details.php') ? 'active' : ''; ?>">
+                      <a href="employee-hour-rate-details" class="menu-link">
                         <div data-i18n="Employee Per Hour Rate">Employee Per Hour Rate</div>
                       </a>
                     </li>

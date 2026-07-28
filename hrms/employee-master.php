@@ -798,6 +798,34 @@ include 'header.php';
       }
     });
 
+    // Sub-master Info buttons listeners
+    document.getElementById("btnPayrollInfo").addEventListener('click', () => {
+      const code = document.getElementById("emp_code").value;
+      if (code) {
+        window.location.href = `employee-payroll-details.php?emp_code=${code}`;
+      } else {
+        window.location.href = 'employee-payroll-details.php';
+      }
+    });
+
+    document.getElementById("btnHourRateInfo").addEventListener('click', () => {
+      const code = document.getElementById("emp_code").value;
+      if (code) {
+        window.location.href = `employee-hour-rate-details.php?emp_code=${code}`;
+      } else {
+        window.location.href = 'employee-hour-rate-details.php';
+      }
+    });
+
+    document.getElementById("btnNomineeInfo").addEventListener('click', () => {
+      const code = document.getElementById("emp_code").value;
+      if (code) {
+        window.location.href = `employee-nominee-details.php?emp_code=${code}`;
+      } else {
+        window.location.href = 'employee-nominee-details.php';
+      }
+    });
+
     // File inputs triggers
     const btnBrowsePhoto = document.getElementById("btnBrowsePhoto");
     const photoFile = document.getElementById("photoFile");

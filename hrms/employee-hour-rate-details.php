@@ -8,7 +8,7 @@ include 'header.php';
 
   <!-- Draggable Floating Dialog Card -->
   <div id="draggableCard" class="card shadow-lg border-1"
-    style="max-width: 700px; width: 100%; border-radius: 8px !important; border: 1px solid #c9c8cc !important; background-color: #ffffff; position: absolute; opacity: 0; transition: opacity 0.15s ease-in-out; z-index: 10;">
+    style="max-width: 700px; width: 100%; border-radius: 8px !important; border: 1px solid #c9c8cc !important; background-color: #ffffff; position: absolute; opacity: 0; transition: opacity 0.15s ease-in-out; z-index: 1;">
 
     <!-- Dialog Header (Acts as Drag Handle) -->
     <div class="card-header p-2 px-3 text-white d-flex align-items-center justify-content-between"
@@ -29,30 +29,23 @@ include 'header.php';
         </div>
 
         <!-- Classic Group Box using Fieldset/Legend -->
-        <fieldset class="border p-3 rounded mb-2"
-          style="border-color: #9ca3af !important; background-color: #e5e7eb !important;">
+        <fieldset class="border p-3 rounded mb-2 bg-legacy-blue"
+          style="border-color: #9ca3af !important;">
           <legend class="float-none w-auto px-2 fw-bold text-primary" style="font-size: 12px; margin-bottom: 0;">
             Employee Rate</legend>
 
           <!-- Id & Employee Fields -->
-          <div class="row g-2 mb-2 align-items-center">
-            <div class="col-md-4 d-flex align-items-center">
-              <label class="fw-semibold text-dark-blue me-2 text-end"
-                style="font-size: 11px; min-width: 60px;">Id.</label>
-              <input type="text" class="form-control form-control-sm border-secondary text-center"
-                style="font-size: 11px; width: 80px;" />
-            </div>
-          </div>
-
+          <input type="hidden" name="id" id="rate_db_id" value="0">
+          
           <div class="row g-2 mb-2 align-items-center">
             <div class="col-md-3 d-flex align-items-center">
               <label class="fw-semibold text-dark-blue me-2 text-end"
                 style="font-size: 11px; min-width: 60px;">Employee</label>
-              <input type="text" class="form-control form-control-sm border-secondary text-center"
-                style="font-size: 11px; width: 80px;" />
+              <input type="text" name="emp_code" id="emp_code" class="form-control form-control-sm border-secondary text-center"
+                style="font-size: 11px; width: 80px;" required />
             </div>
             <div class="col-md-9">
-              <input type="text" class="form-control form-control-sm bg-white border-secondary fw-semibold text-dark"
+              <input type="text" name="emp_name" id="emp_name" class="form-control form-control-sm bg-white border-secondary fw-semibold text-dark"
                 readonly style="font-size: 11px;" />
             </div>
           </div>
@@ -62,26 +55,31 @@ include 'header.php';
             <div class="col-md-12 d-flex align-items-center">
               <label class="fw-semibold text-dark-blue me-2 text-end"
                 style="font-size: 11px; min-width: 60px;">Dept.</label>
-              <input type="text" class="form-control form-control-sm border-secondary"
-                style="font-size: 11px; max-width: 320px;" />
+              <input type="text" name="dept_name" id="dept_name" class="form-control form-control-sm bg-white border-secondary"
+                readonly style="font-size: 11px; max-width: 320px;" />
             </div>
           </div>
 
           <!-- Effective From & Month -->
           <div class="row g-2 mb-2 align-items-center">
-            <div class="col-md-6 d-flex align-items-center">
+            <div class="col-md-8 d-flex align-items-center">
               <label class="fw-semibold text-dark-blue me-2 text-end"
                 style="font-size: 11px; min-width: 60px;">Effective From</label>
-              <select class="form-select form-select-sm border-secondary" style="font-size: 11px; max-width: 120px;">
-                <option>2026</option>
-                <option>2027</option>
+              <select name="effective_year" id="effective_year" class="form-select form-select-sm border-secondary" style="font-size: 11px; max-width: 120px;">
+                <option value="2026" selected>2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
               </select>
               <label class="fw-semibold text-dark-blue mx-2" style="font-size: 11px;">Month</label>
-              <select class="form-select form-select-sm border-secondary" style="font-size: 11px; max-width: 100px;">
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
+              <select name="effective_month" id="effective_month" class="form-select form-select-sm border-secondary" style="font-size: 11px; max-width: 100px;">
+                <?php
+                for ($m = 1; $m <= 12; $m++) {
+                    $selected = ($m == intval(date('m'))) ? 'selected' : '';
+                    echo "<option value='{$m}' {$selected}>{$m}</option>";
+                }
+                ?>
               </select>
             </div>
           </div>
@@ -89,18 +87,16 @@ include 'header.php';
           <!-- Day Rate & Night Rate -->
           <div class="row g-2 mb-2 align-items-center">
             <div class="col-md-6 d-flex align-items-center">
-              <label class="fw-semibold text-dark-blue me-2 text-end" style="font-size: 11px; min-width: 60px;">Day
-                Rate</label>
-              <input type="text" class="form-control form-control-sm border-secondary text-end" value="0.00"
+              <label class="fw-semibold text-dark-blue me-2 text-end" style="font-size: 11px; min-width: 60px;">Day Rate</label>
+              <input type="number" step="0.01" name="day_rate" id="day_rate" class="form-control form-control-sm border-secondary text-end" value="0.00"
                 style="font-size: 11px; max-width: 120px;" />
             </div>
           </div>
 
           <div class="row g-2 mb-2 align-items-center">
             <div class="col-md-6 d-flex align-items-center">
-              <label class="fw-semibold text-dark-blue me-2 text-end" style="font-size: 11px; min-width: 60px;">Night
-                Rate</label>
-              <input type="text" class="form-control form-control-sm border-secondary text-end" value="0.00"
+              <label class="fw-semibold text-dark-blue me-2 text-end" style="font-size: 11px; min-width: 60px;">Night Rate</label>
+              <input type="number" step="0.01" name="night_rate" id="night_rate" class="form-control form-control-sm border-secondary text-end" value="0.00"
                 style="font-size: 11px; max-width: 120px;" />
             </div>
           </div>
@@ -170,7 +166,7 @@ include 'header.php';
         <!-- Right Side: Record Navigation Slider (Legacy style) -->
         <div class="d-flex align-items-center bg-white p-1 rounded border shadow-xs"
           style="border-color: #9ca3af !important; font-size: 11px; height: 50px;">
-          <span class="px-2 fw-bold me-2 text-dark">NEW</span>
+          <span class="px-2 fw-bold me-2 text-dark" id="sliderModeLabel">NEW</span>
           <span id="navLabel" class="px-2 fw-bold border-end border-start me-2"
             style="min-width: 50px; text-align: center; white-space: nowrap;">0 / 0</span>
           <button type="button" id="btnPrev" class="btn btn-xs btn-outline-secondary px-2 py-0"
@@ -187,6 +183,44 @@ include 'header.php';
 </div>
 <!--/ Content -->
 
+<!-- Employee Search modal -->
+<div class="modal fade" id="empSelectModal" tabindex="-1" data-bs-backdrop="static"
+  aria-labelledby="empSelectModalLabel" aria-hidden="true" style="z-index: 1200 !important;">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border shadow-lg"
+      style="border-radius: 6px !important; border-color: #a3b8cc !important;">
+      <div class="modal-header text-white p-2 px-3"
+        style="background: linear-gradient(90deg, #135ca3 0%, #00a2e8 100%); border-top-left-radius: 5px !important; border-top-right-radius: 5px !important; border-bottom: 1px solid #104f9b;">
+        <h6 class="modal-title fw-bold text-white d-flex align-items-center" id="empSelectModalLabel"
+          style="font-size: 13px; margin: 0;">
+          <i class="ti ti-users me-2" style="font-size: 15px;"></i>Select Hour Rate Record
+        </h6>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+          style="font-size: 10px;"></button>
+      </div>
+      <div class="modal-body p-3" style="background-color: #e8f0fe !important;">
+        <div class="table-responsive bg-white rounded p-2 border"
+          style="max-height: 350px; overflow-y: auto; border-color: #a3b8cc !important;">
+          <table class="table table-sm table-striped table-bordered table-hover mb-0" style="font-size: 11px;">
+            <thead class="table-light text-primary fw-bold">
+              <tr>
+                <th style="width: 80px;">Code</th>
+                <th>Employee Name</th>
+                <th>Period</th>
+                <th>Day Rate</th>
+                <th>Night Rate</th>
+              </tr>
+            </thead>
+            <tbody id="empSelectBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
   /* Light blue background for the tab content window */
   .bg-legacy-blue {
@@ -197,11 +231,39 @@ include 'header.php';
   .text-dark-blue {
     color: #111827 !important;
   }
+
+  /* Make inputs have classical blue borders */
+  .bg-legacy-blue .form-control,
+  .bg-legacy-blue .form-select {
+    border: 1px solid #135ca3 !important;
+    border-radius: 2px !important;
+    background-color: #ffffff !important;
+  }
+
+  .bg-legacy-blue .form-control:focus,
+  .bg-legacy-blue .form-select:focus {
+    border-color: #00a2e8 !important;
+    box-shadow: 0 0 4px rgba(0, 162, 232, 0.4) !important;
+  }
+
+  /* Override global card z-index during modal overlays */
+  .modal-backdrop {
+    z-index: 1150 !important;
+  }
+  .modal {
+    z-index: 1200 !important;
+  }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const card = document.getElementById("draggableCard");
+    const form = document.getElementById("hourRateForm");
+    const formElements = form.querySelectorAll('input, select, button');
+
+    let hourRateList = [];
+    let currentIndex = -1;
+    let currentMode = 'view'; // view, add, edit
 
     // Center card initially on load
     const initialLeft = (window.innerWidth - card.offsetWidth) / 2;
@@ -225,6 +287,242 @@ include 'header.php';
         window.location.href = 'employee-master.php';
       });
     }
+
+    // Dynamic employee code lookup
+    document.getElementById("emp_code").addEventListener('change', function () {
+      const code = this.value.trim();
+      if (!code) return;
+
+      fetch(`actions/employee-hour-rate-action.php?action=get_employee&emp_code=${code}`)
+        .then(res => res.json())
+        .then(res => {
+          if (res.status === 'success') {
+            document.getElementById("emp_name").value = res.data.emp_name;
+            document.getElementById("dept_name").value = res.data.dept_name || '';
+
+            // check if they already have details in list
+            const existingIndex = hourRateList.findIndex(p => p.emp_code === code);
+            if (existingIndex !== -1) {
+              currentIndex = existingIndex;
+              displayRecord(currentIndex);
+            } else {
+              document.getElementById("day_rate").value = "0.00";
+              document.getElementById("night_rate").value = "0.00";
+            }
+          } else {
+            alert(res.message);
+            document.getElementById("emp_code").value = "";
+            document.getElementById("emp_name").value = "";
+            document.getElementById("dept_name").value = "";
+          }
+        });
+    });
+
+    // CRUD action triggers
+    function fetchHourRates(openSearch = false) {
+      fetch('actions/employee-hour-rate-action.php?action=view')
+        .then(res => res.json())
+        .then(response => {
+          if (response.status === 'success') {
+            hourRateList = response.data;
+            
+            // Check URL query parameters for emp_code
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryEmpCode = urlParams.get('emp_code');
+
+            if (queryEmpCode) {
+              const matchIdx = hourRateList.findIndex(p => p.emp_code === queryEmpCode);
+              if (matchIdx !== -1) {
+                currentIndex = matchIdx;
+                displayRecord(currentIndex);
+              } else {
+                document.getElementById("emp_code").value = queryEmpCode;
+                document.getElementById("emp_code").dispatchEvent(new Event('change'));
+                setMode('add');
+              }
+            } else if (hourRateList.length > 0) {
+              if (currentIndex === -1) currentIndex = hourRateList.length - 1;
+              displayRecord(currentIndex);
+            } else {
+              clearForm();
+              setMode('add');
+            }
+
+            if (openSearch) {
+              populateSearchModal();
+              const modalEl = document.getElementById('empSelectModal');
+              document.body.appendChild(modalEl);
+              const myModal = new bootstrap.Modal(modalEl);
+              myModal.show();
+            }
+          }
+        });
+    }
+
+    function displayRecord(index) {
+      if (index < 0 || index >= hourRateList.length) return;
+      const rate = hourRateList[index];
+
+      document.getElementById("rate_db_id").value = rate.id;
+      document.getElementById("emp_code").value = rate.emp_code;
+      document.getElementById("emp_name").value = rate.emp_name;
+      document.getElementById("dept_name").value = rate.dept_name || '';
+      document.getElementById("effective_year").value = rate.effective_year;
+      document.getElementById("effective_month").value = rate.effective_month;
+      document.getElementById("day_rate").value = rate.day_rate;
+      document.getElementById("night_rate").value = rate.night_rate;
+
+      // Update Navigation
+      document.getElementById("navLabel").textContent = `${index + 1} / ${hourRateList.length}`;
+      document.getElementById("rangeSlider").value = index;
+      document.getElementById("rangeSlider").max = hourRateList.length - 1;
+
+      setMode('view');
+    }
+
+    function clearForm() {
+      form.reset();
+      document.getElementById("rate_db_id").value = "0";
+      document.getElementById("emp_code").value = "";
+      document.getElementById("emp_name").value = "";
+      document.getElementById("dept_name").value = "";
+      document.getElementById("day_rate").value = "0.00";
+      document.getElementById("night_rate").value = "0.00";
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById("sliderModeLabel").textContent = mode.toUpperCase();
+
+      if (mode === 'view') {
+        formElements.forEach(el => el.disabled = true);
+        document.getElementById("btnAdd").disabled = false;
+        document.getElementById("btnEdit").disabled = hourRateList.length === 0;
+        document.getElementById("btnDelete").disabled = hourRateList.length === 0;
+        document.getElementById("btnSave").disabled = true;
+        document.getElementById("btnCancel").disabled = true;
+      } else {
+        formElements.forEach(el => el.disabled = false);
+        document.getElementById("emp_name").disabled = true;
+        document.getElementById("dept_name").disabled = true;
+        if (mode === 'edit') {
+          document.getElementById("emp_code").disabled = true;
+        }
+        document.getElementById("btnAdd").disabled = true;
+        document.getElementById("btnEdit").disabled = true;
+        document.getElementById("btnDelete").disabled = true;
+        document.getElementById("btnSave").disabled = false;
+        document.getElementById("btnCancel").disabled = false;
+      }
+    }
+
+    // Button event bindings
+    document.getElementById("btnAdd").addEventListener('click', () => {
+      clearForm();
+      setMode('add');
+    });
+
+    document.getElementById("btnEdit").addEventListener('click', () => {
+      setMode('edit');
+    });
+
+    document.getElementById("btnCancel").addEventListener('click', () => {
+      if (hourRateList.length > 0) {
+        displayRecord(currentIndex);
+      } else {
+        clearForm();
+        setMode('add');
+      }
+    });
+
+    document.getElementById("btnDelete").addEventListener('click', () => {
+      if (currentIndex < 0 || currentIndex >= hourRateList.length) return;
+      if (!confirm("Are you sure you want to delete this hour rate record?")) return;
+
+      const record = hourRateList[currentIndex];
+      fetch(`actions/employee-hour-rate-action.php?action=delete&id=${record.id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            alert(data.message);
+            currentIndex = Math.max(0, currentIndex - 1);
+            fetchHourRates();
+          } else {
+            alert(data.message);
+          }
+        });
+    });
+
+    document.getElementById("btnSave").addEventListener('click', () => {
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const formData = new FormData(form);
+      fetch('actions/employee-hour-rate-action.php?action=save', {
+        method: 'POST',
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            alert(data.message);
+            fetchHourRates();
+          } else {
+            alert(data.message);
+          }
+        });
+    });
+
+    // Slider and Navigation
+    document.getElementById("btnPrev").addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        displayRecord(currentIndex);
+      }
+    });
+
+    document.getElementById("btnNext").addEventListener('click', () => {
+      if (currentIndex < hourRateList.length - 1) {
+        currentIndex++;
+        displayRecord(currentIndex);
+      }
+    });
+
+    document.getElementById("rangeSlider").addEventListener('input', function () {
+      currentIndex = parseInt(this.value);
+      displayRecord(currentIndex);
+    });
+
+    // Search action
+    document.getElementById("btnSearch").addEventListener('click', () => {
+      fetchHourRates(true);
+    });
+
+    function populateSearchModal() {
+      const body = document.getElementById("empSelectBody");
+      body.innerHTML = '';
+      hourRateList.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        tr.style.cursor = 'pointer';
+        tr.innerHTML = `
+          <td>${r.emp_code}</td>
+          <td>${r.emp_name}</td>
+          <td>Year: ${r.effective_year}, Month: ${r.effective_month}</td>
+          <td>${r.day_rate}</td>
+          <td>${r.night_rate}</td>
+        `;
+        tr.addEventListener('click', () => {
+          currentIndex = idx;
+          displayRecord(currentIndex);
+          bootstrap.Modal.getInstance(document.getElementById('empSelectModal')).hide();
+        });
+        body.appendChild(tr);
+      });
+    }
+
+    fetchHourRates();
   });
 
   // Simple Draggable Functionality
