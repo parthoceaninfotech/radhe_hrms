@@ -3,7 +3,8 @@ $pageTitle = "Employee Search - Payroll System";
 require_once 'root/config.php';
 include 'header.php';
 global $ai_db;
-$employees = $ai_db->aiGetQuery("SELECT * FROM tbl_users WHERE user_type = 'employee' ORDER BY id ASC");
+$company_id = isset($_SESSION['selected_company_id']) ? intval($_SESSION['selected_company_id']) : 0;
+$employees = $ai_db->aiGetQuery("SELECT * FROM hrms_employeemaster WHERE company_id = $company_id ORDER BY id ASC");
 $totalCount = count($employees);
 ?>
 
@@ -71,13 +72,18 @@ $totalCount = count($employees);
                 ?>
                 <tr <?php echo $trClass; ?>>
                   <td><?php echo htmlspecialchars($emp['id']); ?></td>
-                  <td <?php echo $empCodeClass; ?>><?php echo htmlspecialchars($emp['username'] ?? ''); ?></td>
-                  <td class="text-start fw-semibold"><?php echo htmlspecialchars($emp['name'] ?? ''); ?></td>
-                  <td class="text-start">-</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td class="text-start"><?php echo htmlspecialchars($emp['address'] ?? '-'); ?></td>
+                  <td <?php echo $empCodeClass; ?>><?php echo htmlspecialchars($emp['emp_code'] ?? ''); ?></td>
+                  <td class="text-start fw-semibold"><?php echo htmlspecialchars($emp['emp_name'] ?? ''); ?></td>
+                  <td class="text-start"><?php echo htmlspecialchars($emp['father_name'] ?? '-'); ?></td>
+                  <td><?php echo htmlspecialchars($emp['gender'] ?? '-'); ?></td>
+                  <td>
+
+                    <?php echo htmlspecialchars(!empty($emp['birth_date']) && $emp['birth_date'] !== '0000-00-00' ? date('d/m/Y', strtotime($emp['birth_date'])) : '-'); ?>
+                  </td>
+                  <td><?php echo htmlspecialchars($emp['marital_status'] ?? '-'); ?></td>
+                  <td class="text-start">
+                    <?php echo htmlspecialchars(trim(($emp['address_1'] ?? '') . ' ' . ($emp['address_2'] ?? '') . ' ' . ($emp['address_3'] ?? '')) ?: '-'); ?>
+                  </td>
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>
