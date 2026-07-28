@@ -1563,16 +1563,7 @@ include 'header.php';
       document.getElementById("company_db_id").value = "0";
       document.getElementById("old_logo").value = "";
       document.getElementById("old_sig").value = "";
-
-      // Fetch next Company ID from database
-      fetch('actions/company-master-action.php?action=next_code')
-        .then(res => res.json())
-        .then(response => {
-          if (response.status === 'success') {
-            document.getElementById("company_id").value = response.next_code;
-          }
-        })
-        .catch(err => console.error("Error fetching next company code: ", err));
+      document.getElementById("company_id").value = ""; // Do not autofill, leave it editable
 
       updatePreview("logoPreviewBox", null, "ti-photo");
       updatePreview("sigPreviewBox", null, "ti-signature");
@@ -1585,6 +1576,7 @@ include 'header.php';
         formElements.forEach(el => {
           if (el.id !== 'rangeSlider') el.disabled = true;
         });
+        document.getElementById("company_id").readOnly = true;
         document.getElementById("btnAdd").disabled = false;
         document.getElementById("btnEdit").disabled = companyRecords.length === 0;
         document.getElementById("btnDelete").disabled = companyRecords.length === 0;
@@ -1602,7 +1594,7 @@ include 'header.php';
         formElements.forEach(el => {
           if (el.id !== 'rangeSlider') el.disabled = false;
         });
-        document.getElementById("company_id").readOnly = true; // Ensure it remains read-only
+        document.getElementById("company_id").readOnly = false; // Make it editable in add/edit modes
         document.getElementById("btnAdd").disabled = true;
         document.getElementById("btnEdit").disabled = true;
         document.getElementById("btnDelete").disabled = true;
