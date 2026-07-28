@@ -1,6 +1,9 @@
 <?php
 $pageTitle = "Employee Search - Payroll System";
 include 'header.php';
+global $ai_db;
+$employees = $ai_db->aiGetQuery("SELECT * FROM tbl_users WHERE user_type = 'employee' ORDER BY id ASC");
+$totalCount = count($employees);
 ?>
 
 <!-- Content wrapper -->
@@ -27,7 +30,8 @@ include 'header.php';
           <!-- Blank left side or search input can go here if needed -->
         </div>
         <div class="d-flex align-items-center gap-3">
-          <span class="fw-bold text-danger" style="font-size: 11px;">[ Filtered Employee : 29/29 ]</span>
+          <span class="fw-bold text-danger" style="font-size: 11px;">[ Filtered Employee : <span
+              id="filtered_count_ui"><?php echo $totalCount; ?></span>/<?php echo $totalCount; ?> ]</span>
           <div class="form-check mb-0">
             <input class="form-check-input" type="checkbox" id="allEmployeeCheckbox" checked>
             <label class="form-check-label fw-semibold text-dark" style="font-size: 11px;" for="allEmployeeCheckbox">All
@@ -58,176 +62,28 @@ include 'header.php';
             </tr>
           </thead>
           <tbody id="employeeTableBody">
-            <tr>
-              <td>1859</td>
-              <td>10001</td>
-              <td class="text-start fw-semibold">RATHOD SAJANBA NARENDRASINH</td>
-              <td class="text-start">NARENDRASINH</td>
-              <td>FEMALE</td>
-              <td>14.12.1969</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr>
-              <td>1840</td>
-              <td>10002</td>
-              <td class="text-start fw-semibold">AVANI DHARMESHBHAI</td>
-              <td class="text-start">DHARMESHBHAI</td>
-              <td>FEMALE</td>
-              <td>08.11.1984</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr>
-              <td>1854</td>
-              <td>10003</td>
-              <td class="text-start fw-semibold">GADHIYA MITALBEN DHAVALBHAI</td>
-              <td class="text-start">DHAVALBHAI</td>
-              <td>FEMALE</td>
-              <td>09.05.1994</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr class="table-danger" style="background-color: #ffb3b3 !important;">
-              <td>1848</td>
-              <td class="fw-bold">10004</td>
-              <td class="text-start fw-semibold">ADITYA NILESHBHAI PARMAR</td>
-              <td class="text-start">NILESHBHAI</td>
-              <td>MALE</td>
-              <td>16.11.1994</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr class="table-danger" style="background-color: #ffb3b3 !important;">
-              <td>1855</td>
-              <td class="fw-bold">10005</td>
-              <td class="text-start fw-semibold">PARMAR URVASHI ABHISHEK</td>
-              <td class="text-start">ABHISHEK</td>
-              <td>FEMALE</td>
-              <td>08.08.1995</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr class="table-danger" style="background-color: #ffb3b3 !important;">
-              <td>1860</td>
-              <td class="fw-bold">10006</td>
-              <td class="text-start fw-semibold">SOLANKI ALKABEN ASHISHBHAI</td>
-              <td class="text-start">ASHISHBHAI</td>
-              <td>FEMALE</td>
-              <td>23.04.1983</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr>
-              <td>1855</td>
-              <td>10007</td>
-              <td class="text-start fw-semibold">JADEJA HARPALSINH RANJITSINH</td>
-              <td class="text-start">RANJITSINH</td>
-              <td>MALE</td>
-              <td>09.03.1998</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr>
-              <td>1851</td>
-              <td>10008</td>
-              <td class="text-start fw-semibold">CHAVDA PURVESH KAMLESHBHAI</td>
-              <td class="text-start">KAMLESHBHAI</td>
-              <td>MALE</td>
-              <td>14.10.1993</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr>
-              <td>1853</td>
-              <td>10009</td>
-              <td class="text-start fw-semibold">DERASARI MEERA MANISH</td>
-              <td class="text-start">MANISH</td>
-              <td>FEMALE</td>
-              <td>19.09.1979</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr class="table-danger" style="background-color: #ffb3b3 !important;">
-              <td>1850</td>
-              <td class="fw-bold">10010</td>
-              <td class="text-start fw-semibold">CHAUHAN SRUSHTI MAYURBHAI</td>
-              <td class="text-start">MAYURBHAI</td>
-              <td>FEMALE</td>
-              <td>16.11.1999</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr>
-              <td>1861</td>
-              <td>10011</td>
-              <td class="text-start fw-semibold">SUTARIA NIDHI KARAMSHIBHAI</td>
-              <td class="text-start">KARAMSHIBHAI</td>
-              <td>FEMALE</td>
-              <td>27.06.1988</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr>
-              <td>1852</td>
-              <td>10012</td>
-              <td class="text-start fw-semibold">DALVANI RUKSHANABEN MAHMADBHAI</td>
-              <td class="text-start">MAHMADBHAI</td>
-              <td>FEMALE</td>
-              <td>02.12.1982</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr>
-              <td>1857</td>
-              <td>10013</td>
-              <td class="text-start fw-semibold">RATHOD DRASHTI NARENDRASINH</td>
-              <td class="text-start">NARENDRASINH</td>
-              <td>FEMALE</td>
-              <td>20.08.1999</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr>
-              <td>1858</td>
-              <td>10014</td>
-              <td class="text-start fw-semibold">RATHOD MANISHABEN BHAVESHBHAI</td>
-              <td class="text-start">BHAVESHBHAI RATHOD</td>
-              <td>FEMALE</td>
-              <td>08.08.1986</td>
-              <td>-</td>
-              <td class="text-start">RAJKOT</td>
-            </tr>
-            <tr>
-              <td>14655</td>
-              <td>10015</td>
-              <td class="text-start fw-semibold">CHAVDA VILASBEN VIPULBHAI</td>
-              <td class="text-start">VIPULBHAI</td>
-              <td>FEMALE</td>
-              <td>22.03.1977</td>
-              <td>MARRIED</td>
-              <td class="text-start">-</td>
-            </tr>
-            <tr>
-              <td>14657</td>
-              <td>10016</td>
-              <td class="text-start fw-semibold">VIPUL MEPABHAI CHAVDA</td>
-              <td class="text-start">MEPABHAI</td>
-              <td>MALE</td>
-              <td>01.01.1978</td>
-              <td>MARRIED</td>
-              <td class="text-start">-</td>
-            </tr>
-            <tr>
-              <td>19695</td>
-              <td>10017</td>
-              <td class="text-start fw-semibold">SHIVRAJSINH ANIRUDDHSINH JADEJA</td>
-              <td class="text-start">ANIRUDDHSINH</td>
-              <td>MALE</td>
-              <td>26.05.2000</td>
-              <td>MARRIED</td>
-              <td class="text-start">-</td>
-            </tr>
+            <?php if (!empty($employees)): ?>
+              <?php foreach ($employees as $emp):
+                $isInactive = (isset($emp['status']) && $emp['status'] !== 'active');
+                $trClass = $isInactive ? 'class="table-danger" style="background-color: #ffb3b3 !important;"' : '';
+                $empCodeClass = $isInactive ? 'class="fw-bold"' : '';
+                ?>
+                <tr <?php echo $trClass; ?>>
+                  <td><?php echo htmlspecialchars($emp['id']); ?></td>
+                  <td <?php echo $empCodeClass; ?>><?php echo htmlspecialchars($emp['username'] ?? ''); ?></td>
+                  <td class="text-start fw-semibold"><?php echo htmlspecialchars($emp['name'] ?? ''); ?></td>
+                  <td class="text-start">-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td class="text-start"><?php echo htmlspecialchars($emp['address'] ?? '-'); ?></td>
+                </tr>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="8" class="text-center text-muted">No employees found.</td>
+              </tr>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>
