@@ -1445,7 +1445,9 @@ include 'header.php';
                 selectBody.appendChild(tr);
               });
 
-              companySelectModalInstance = new bootstrap.Modal(document.getElementById("companySelectModal"));
+              const modalEl = document.getElementById("companySelectModal");
+              document.body.appendChild(modalEl);
+              companySelectModalInstance = new bootstrap.Modal(modalEl);
               companySelectModalInstance.show();
             } else {
               currentIndex = -1;

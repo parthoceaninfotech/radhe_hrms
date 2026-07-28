@@ -230,7 +230,7 @@ include 'header.php';
             } else {
               currentIndex = -1;
               clearForm();
-              
+
               // Reset navigation UI for 0 records
               document.getElementById("navLabel").innerText = "0 / 0";
               const slider = document.getElementById("rangeSlider");
@@ -263,7 +263,9 @@ include 'header.php';
       });
 
       if (!deptSelectModalInstance) {
-        deptSelectModalInstance = new bootstrap.Modal(document.getElementById("deptSelectModal"));
+        const modalEl = document.getElementById("deptSelectModal");
+        document.body.appendChild(modalEl);
+        deptSelectModalInstance = new bootstrap.Modal(modalEl);
       }
       deptSelectModalInstance.show();
     }

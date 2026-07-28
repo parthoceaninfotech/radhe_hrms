@@ -263,7 +263,9 @@ include 'header.php';
       });
 
       if (!desigSelectModalInstance) {
-        desigSelectModalInstance = new bootstrap.Modal(document.getElementById("desigSelectModal"));
+        const modalEl = document.getElementById("desigSelectModal");
+        document.body.appendChild(modalEl);
+        desigSelectModalInstance = new bootstrap.Modal(modalEl);
       }
       desigSelectModalInstance.show();
     }

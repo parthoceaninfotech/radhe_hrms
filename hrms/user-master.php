@@ -439,7 +439,9 @@ include 'header.php';
     if (btnSearch) {
       btnSearch.addEventListener('click', () => {
         if (!userSearchModalInstance) {
-          userSearchModalInstance = new bootstrap.Modal(document.getElementById("userSearchModal"));
+          const modalEl = document.getElementById("userSearchModal");
+          document.body.appendChild(modalEl);
+          userSearchModalInstance = new bootstrap.Modal(modalEl);
         }
         renderSearchTable();
         document.getElementById("userSearchInput").value = "";

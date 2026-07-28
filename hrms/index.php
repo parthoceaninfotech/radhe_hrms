@@ -94,6 +94,7 @@ $showModal = (!isset($_SESSION['selected_company_id']) || intval($_SESSION['sele
                 selectBody.appendChild(tr);
               });
 
+              document.body.appendChild(modalEl);
               const selectModal = new bootstrap.Modal(modalEl);
               selectModal.show();
             } else {
