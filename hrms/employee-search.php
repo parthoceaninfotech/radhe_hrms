@@ -1,5 +1,6 @@
 <?php
 $pageTitle = "Employee Search - Payroll System";
+require_once 'root/config.php';
 include 'header.php';
 global $ai_db;
 $employees = $ai_db->aiGetQuery("SELECT * FROM tbl_users WHERE user_type = 'employee' ORDER BY id ASC");
