@@ -210,5 +210,20 @@
         }
       });
     }
+
+    // Global Modal backdrop/overlap handling to hide draggableCard when any modal (search filter) shows
+    document.addEventListener('show.bs.modal', function (event) {
+      const card = document.getElementById("draggableCard");
+      if (card) {
+        card.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('hidden.bs.modal', function (event) {
+      const card = document.getElementById("draggableCard");
+      if (card) {
+        card.style.display = 'block';
+      }
+    });
   });
 </script>
