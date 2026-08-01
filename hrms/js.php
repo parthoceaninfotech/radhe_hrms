@@ -213,6 +213,7 @@
 
     // Global Modal backdrop/overlap handling to hide draggableCard when any modal (search filter) shows
     document.addEventListener('show.bs.modal', function (event) {
+      if (event.target.id === 'calculatorModal') return;
       const card = document.getElementById("draggableCard");
       if (card) {
         card.style.display = 'none';
@@ -220,10 +221,173 @@
     });
 
     document.addEventListener('hidden.bs.modal', function (event) {
+      if (event.target.id === 'calculatorModal') return;
       const card = document.getElementById("draggableCard");
       if (card) {
         card.style.display = 'block';
       }
     });
+
+    // --- Calculator Implementation ---
+    const btnOpenCalculator = document.getElementById("btnOpenCalculator");
+    let calculatorModalInstance = null;
+    if (btnOpenCalculator) {
+      btnOpenCalculator.addEventListener('click', () => {
+        const modalEl = document.getElementById("calculatorModal");
+        if (modalEl) {
+          if (!calculatorModalInstance) {
+            calculatorModalInstance = new bootstrap.Modal(modalEl);
+            // Setup dragging
+            const dialog = modalEl.querySelector('.modal-dialog');
+            const handle = modalEl.querySelector('.drag-handle');
+            if (dialog && handle) {
+              makeElementDraggable(dialog, handle);
+            }
+          }
+          calculatorModalInstance.show();
+        }
+      });
+    }
+
+    let calcInput = '0';
+    let calcResult = null;
+    let calcOperator = null;
+    let calcClearOnNext = false;
+
+    function updateCalcDisplay() {
+      const display = document.getElementById('calcDisplay');
+      if (display) display.innerText = calcInput;
+    }
+
+    function handleCalcInput(val) {
+      if ((val >= '0' && val <= '9') || val === '.') {
+        if (calcInput === '0' || calcClearOnNext) {
+          calcInput = val === '.' ? '0.' : val;
+          calcClearOnNext = false;
+        } else {
+          if (val === '.' && calcInput.includes('.')) return;
+          calcInput += val;
+        }
+      } else if (val === 'C') {
+        calcInput = '0';
+        calcResult = null;
+        calcOperator = null;
+        calcClearOnNext = false;
+      } else if (val === 'CE') {
+        calcInput = '0';
+      } else if (val === 'Backspace') {
+        calcInput = calcInput.slice(0, -1);
+        if (calcInput === '' || calcInput === '-') calcInput = '0';
+      } else if (val === '+-') {
+        if (calcInput !== '0') {
+          calcInput = calcInput.startsWith('-') ? calcInput.slice(1) : '-' + calcInput;
+        }
+      } else if (val === '%') {
+        calcInput = String(parseFloat(calcInput) / 100);
+      } else if (val === '1/x') {
+        const num = parseFloat(calcInput);
+        calcInput = num !== 0 ? String(1 / num) : 'Error';
+        calcClearOnNext = true;
+      } else if (val === 'x2') {
+        const num = parseFloat(calcInput);
+        calcInput = String(num * num);
+        calcClearOnNext = true;
+      } else if (val === 'sqrt') {
+        const num = parseFloat(calcInput);
+        calcInput = num >= 0 ? String(Math.sqrt(num)) : 'Error';
+        calcClearOnNext = true;
+      } else if (['+', '-', '*', '/'].includes(val)) {
+        if (calcOperator && !calcClearOnNext) {
+          calculateResult();
+        }
+        calcResult = parseFloat(calcInput);
+        calcOperator = val;
+        calcClearOnNext = true;
+      } else if (val === '=') {
+        calculateResult();
+        calcOperator = null;
+        calcClearOnNext = true;
+      }
+      updateCalcDisplay();
+    }
+
+    function calculateResult() {
+      if (calcOperator === null || calcResult === null) return;
+      const currentVal = parseFloat(calcInput);
+      let finalVal = 0;
+      switch (calcOperator) {
+        case '+': finalVal = calcResult + currentVal; break;
+        case '-': finalVal = calcResult - currentVal; break;
+        case '*': finalVal = calcResult * currentVal; break;
+        case '/': finalVal = currentVal !== 0 ? calcResult / currentVal : 'Error'; break;
+      }
+      calcInput = String(finalVal);
+      calcResult = finalVal;
+    }
+
+    // Attach click events to calculator buttons
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.calc-btn');
+      if (btn) {
+        const val = btn.getAttribute('data-val');
+        handleCalcInput(val);
+      }
+    });
+
+    // Attach keyboard listener when calculator is open
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('calculatorModal');
+      if (modal && modal.classList.contains('show')) {
+        let key = e.key;
+        if (key === 'Enter') key = '=';
+        if (key === 'Escape') {
+          if (calculatorModalInstance) calculatorModalInstance.hide();
+          return;
+        }
+        if ((key >= '0' && key <= '9') || ['+', '-', '*', '/', '.', '=', 'Backspace'].includes(key)) {
+          e.preventDefault();
+          handleCalcInput(key);
+        } else if (key.toLowerCase() === 'c') {
+          e.preventDefault();
+          handleCalcInput('C');
+        }
+      }
+    });
+
+    // Helper to make modal content draggable
+    function makeElementDraggable(elmnt, handle) {
+      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      if (handle) {
+        handle.onmousedown = dragMouseDown;
+      } else {
+        elmnt.onmousedown = dragMouseDown;
+      }
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        if (['INPUT', 'BUTTON', 'A', 'SPAN'].includes(e.target.tagName)) return;
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
   });
 </script>

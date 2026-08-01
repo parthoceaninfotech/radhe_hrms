@@ -535,7 +535,8 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                     <li class="menu-item"><a href="#" class="menu-link">
                         <div data-i18n="Payslip Mail to Employee">Payslip Mail to Employee</div>
                       </a></li>
-                    <li class="menu-item menu-divider-bottom"><a href="#" class="menu-link">
+                    <li class="menu-item menu-divider-bottom"><a href="javascript:void(0)" class="menu-link"
+                        id="btnOpenCalculator">
                         <div data-i18n="Calculator">Calculator</div>
                       </a></li>
 
