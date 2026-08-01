@@ -104,7 +104,7 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                   class="menu-item <?php echo (in_array($current_page, ['master.php', 'company-master.php', 'user-details.php', 'department-master.php', 'designation-master.php', 'holiday-entry.php', 'employee-search.php', 'employee-master.php', 'employee-payroll-details.php', 'employee-per-hour-rate.php', 'view-delete-employee-master.php', 'tds-code-master.php', 'tds-exemption-entry.php', 'professional-tax-master.php', 'pf-rate-master.php', 'salary-component-pf-calculation.php', 'glwf-rate-master.php', 'gratuity-rate-master.php', 'bonus-rate-master.php', 'esic-rate-master.php', 'salary-component-esic-calculation.php', 'salary-component-form-16-gross.php', 'minimum-wage-master.php'])) ? 'active open' : ''; ?>">
                   <a href="javascript:void(0)" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-database"></i>
-                    <div data-i18n="Master">Master</div>
+                    <div data-i18n="Master"><u>M</u>aster</div>
                   </a>
                   <ul class="menu-sub">
                     <li
@@ -262,7 +262,7 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                 <li class="menu-item">
                   <a href="javascript:void(0)" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-shield-lock"></i>
-                    <div data-i18n="Admin">Admin</div>
+                    <div data-i18n="Admin"><u>A</u>dmin</div>
                   </a>
                   <ul class="menu-sub">
                     <li class="menu-item"><a href="#" class="menu-link">
@@ -309,7 +309,7 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                 <li class="menu-item">
                   <a href="javascript:void(0)" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-receipt"></i>
-                    <div data-i18n="Payroll">Payroll</div>
+                    <div data-i18n="Payroll"><u>P</u>ayroll</div>
                   </a>
                   <ul class="menu-sub">
                     <li class="menu-item">
@@ -359,7 +359,7 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                 <li class="menu-item">
                   <a href="javascript:void(0)" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-file-description"></i>
-                    <div data-i18n="Reports">Reports</div>
+                    <div data-i18n="Reports"><u>R</u>eports</div>
                   </a>
                   <ul class="menu-sub">
                     <li class="menu-item"><a href="#" class="menu-link">
@@ -480,15 +480,19 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                   </ul>
                 </li>
                 <!-- Utility -->
-                <li class="menu-item">
+                <li
+                  class="menu-item <?php echo (in_array($current_page, ['change-password.php'])) ? 'active open' : ''; ?>">
                   <a href="javascript:void(0)" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-settings"></i>
-                    <div data-i18n="Utility">Utility</div>
+                    <div data-i18n="Utility"><u>U</u>tility</div>
                   </a>
                   <ul class="menu-sub">
-                    <li class="menu-item menu-divider-bottom"><a href="#" class="menu-link">
+                    <li
+                      class="menu-item menu-divider-bottom <?php echo ($current_page == 'change-password.php') ? 'active' : ''; ?>">
+                      <a href="change-password" class="menu-link">
                         <div data-i18n="Change User Password">Change User Password</div>
-                      </a></li>
+                      </a>
+                    </li>
 
                     <li class="menu-item"><a href="#" class="menu-link">
                         <div data-i18n="Import Employee From Excel Sheet">Import Employee From Excel Sheet</div>
@@ -557,7 +561,7 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                 <li class="menu-item">
                   <a href="exit.php" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-logout"></i>
-                    <div data-i18n="Exit">Exit</div>
+                    <div data-i18n="Exit"><u>E</u>xit</div>
                   </a>
                 </li>
               </ul>

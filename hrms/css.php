@@ -122,6 +122,15 @@
     box-shadow: 0 2px 6px rgba(19, 92, 163, 0.3) !important;
   }
 
+  /* Underline for active, open or hovered main menu links */
+  #layout-menu .menu-inner > .menu-item.active > .menu-link,
+  #layout-menu .menu-inner > .menu-item.open > .menu-link,
+  #layout-menu .menu-inner > .menu-item > .menu-link:hover {
+    text-decoration: underline !important;
+    text-underline-offset: 4px !important;
+    text-decoration-thickness: 2px !important;
+  }
+
   #layout-menu .menu-item .menu-icon {
     font-size: 1.1rem !important;
     margin-right: 0.4rem !important;
@@ -225,9 +234,11 @@
   }
 
   #layout-menu .menu-sub .menu-item.active>.menu-link,
-  #layout-menu .menu-sub .menu-item .menu-link:hover {
+  #layout-menu .menu-sub .menu-item .menu-link:hover,
+  #layout-menu .menu-sub .menu-item .menu-link:focus {
     background-color: rgba(19, 92, 163, 0.08) !important;
     color: #135ca3 !important;
+    outline: none !important;
   }
 
   /* Thin horizontal divider below specific items */
