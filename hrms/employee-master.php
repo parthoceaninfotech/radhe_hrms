@@ -1208,6 +1208,30 @@ include 'header.php';
         form.reportValidity();
         return;
       }
+
+      const joiningDateVal = document.getElementById("joining_date").value.trim();
+      const pfStartDateVal = document.getElementById("pf_start_date").value.trim();
+
+      if (joiningDateVal && pfStartDateVal) {
+        // Parse DD/MM/YYYY date format
+        function parseDateString(dateStr) {
+          const parts = dateStr.split('/');
+          if (parts.length === 3) {
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+          }
+          return new Date(dateStr);
+        }
+
+        const joinDate = parseDateString(joiningDateVal);
+        const pfDate = parseDateString(pfStartDateVal);
+
+        if (pfDate < joinDate) {
+          alert("PF Start Date cannot be earlier than Joining Date!");
+          document.getElementById("pf_start_date").focus();
+          return;
+        }
+      }
+
       const formData = new FormData(form);
       fetch('actions/employee-master-action.php?action=save', {
         method: 'POST',

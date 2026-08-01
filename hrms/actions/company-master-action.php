@@ -230,6 +230,18 @@ if ($action === 'view') {
                 if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_company_id']) === $id) {
                     $_SESSION['selected_company_name'] = $company_name;
                 }
+
+                // Auto-create branch using company address if no branches exist
+                if (!empty($address)) {
+                    $branch_exists = $ai_db->aiGetQuery("SELECT id FROM hrms_branches WHERE company_id = $id");
+                    if (count($branch_exists) == 0) {
+                        $branch_name = !empty($city) ? strtoupper(trim($city)) : "MAIN BRANCH";
+                        $b_code = strtoupper(substr($branch_name, 0, 3)) . rand(10, 99);
+                        $ai_db->aiQuery("INSERT INTO hrms_branches (company_id, branch_code, branch_name, address, place, city, district, state, pt_state, pt_prc_no, pt_pec_no) 
+                                         VALUES ($id, '$b_code', '$branch_name', '$address', '$place', '$city', '$district', '$state', '$pt_state', '$pt_prc_no', '$pt_pec_no')");
+                    }
+                }
+
                 echo json_encode(['status' => 'success', 'message' => 'Company details updated successfully.']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Failed to update company details.']);
@@ -265,6 +277,18 @@ if ($action === 'view') {
                 $new_id = $ai_db->aiLastInsert();
                 $_SESSION['selected_company_id'] = $new_id;
                 $_SESSION['selected_company_name'] = $company_name;
+
+                // Auto-create branch using company address if no branches exist
+                if (!empty($address)) {
+                    $branch_exists = $ai_db->aiGetQuery("SELECT id FROM hrms_branches WHERE company_id = $new_id");
+                    if (count($branch_exists) == 0) {
+                        $branch_name = !empty($city) ? strtoupper(trim($city)) : "MAIN BRANCH";
+                        $b_code = strtoupper(substr($branch_name, 0, 3)) . rand(10, 99);
+                        $ai_db->aiQuery("INSERT INTO hrms_branches (company_id, branch_code, branch_name, address, place, city, district, state, pt_state, pt_prc_no, pt_pec_no) 
+                                         VALUES ($new_id, '$b_code', '$branch_name', '$address', '$place', '$city', '$district', '$state', '$pt_state', '$pt_prc_no', '$pt_pec_no')");
+                    }
+                }
+
                 echo json_encode(['status' => 'success', 'message' => 'Company created successfully.', 'insert_id' => $new_id]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Failed to create company.']);

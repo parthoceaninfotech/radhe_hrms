@@ -173,7 +173,7 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                     </li>
                     <li
                       class="menu-item menu-divider-bottom <?php echo ($current_page == 'view-delete-employee-master.php') ? 'active' : ''; ?>">
-                      <a href="#" class="menu-link">
+                      <a href="view-delete-employee-master" class="menu-link">
                         <div data-i18n="View or Delete Employee Master">View or Delete Employee Master</div>
                       </a>
                     </li>
@@ -197,60 +197,60 @@ if (isset($_SESSION['selected_company_id']) && intval($_SESSION['selected_compan
                       <ul class="menu-sub">
                         <li
                           class="menu-item <?php echo ($current_page == 'professional-tax-master.php') ? 'active' : ''; ?>">
-                          <a href="#" class="menu-link">
+                          <a href="professional-tax-master" class="menu-link">
                             <div data-i18n="Professional Tax Master">Professional Tax Master</div>
                           </a>
                         </li>
                         <li class="menu-item <?php echo ($current_page == 'pf-rate-master.php') ? 'active' : ''; ?>">
-                          <a href="#" class="menu-link">
+                          <a href="pf-rate-master" class="menu-link">
                             <div data-i18n="PF Rate Master">PF Rate Master</div>
                           </a>
                         </li>
                         <li
-                          class="menu-item <?php echo ($current_page == 'salary-component-pf-calculation.php') ? 'active' : ''; ?>">
-                          <a href="#" class="menu-link">
+                          class="menu-item <?php echo ($current_page == 'pf-rate-master.php' && isset($_GET['tab']) && $_GET['tab'] == 'components') ? 'active' : ''; ?>">
+                          <a href="pf-rate-master?tab=components" class="menu-link">
                             <div data-i18n="Salary Component For PF Calculation">Salary Component For PF Calculation
                             </div>
                           </a>
                         </li>
                         <li class="menu-item <?php echo ($current_page == 'glwf-rate-master.php') ? 'active' : ''; ?>">
-                          <a href="#" class="menu-link">
+                          <a href="glwf-rate-master" class="menu-link">
                             <div data-i18n="GLWF Rate Master">GLWF Rate Master</div>
                           </a>
                         </li>
                         <li
                           class="menu-item <?php echo ($current_page == 'gratuity-rate-master.php') ? 'active' : ''; ?>">
-                          <a href="#" class="menu-link">
+                          <a href="gratuity-rate-master" class="menu-link">
                             <div data-i18n="Gratuity Rate Master">Gratuity Rate Master</div>
                           </a>
                         </li>
                         <li class="menu-item <?php echo ($current_page == 'bonus-rate-master.php') ? 'active' : ''; ?>">
-                          <a href="#" class="menu-link">
+                          <a href="bonus-rate-master" class="menu-link">
                             <div data-i18n="Bonus Rate Master">Bonus Rate Master</div>
                           </a>
                         </li>
                         <li class="menu-item <?php echo ($current_page == 'esic-rate-master.php') ? 'active' : ''; ?>">
-                          <a href="#" class="menu-link">
+                          <a href="esic-rate-master" class="menu-link">
                             <div data-i18n="ESIC Rate Master">ESIC Rate Master</div>
                           </a>
                         </li>
                         <li
                           class="menu-item <?php echo ($current_page == 'salary-component-esic-calculation.php') ? 'active' : ''; ?>">
-                          <a href="#" class="menu-link">
+                          <a href="salary-component-esic-calculation" class="menu-link">
                             <div data-i18n="Salary Component For ESIC Calculation">Salary Component For ESIC Calculation
                             </div>
                           </a>
                         </li>
                         <li
                           class="menu-item <?php echo ($current_page == 'salary-component-form-16-gross.php') ? 'active' : ''; ?>">
-                          <a href="#" class="menu-link">
+                          <a href="salary-component-form-16-gross" class="menu-link">
                             <div data-i18n="Salary Component For Form - 16 Gross">Salary Component For Form - 16 Gross
                             </div>
                           </a>
                         </li>
                         <li
                           class="menu-item <?php echo ($current_page == 'minimum-wage-master.php') ? 'active' : ''; ?>">
-                          <a href="#" class="menu-link">
+                          <a href="minimum-wage-master" class="menu-link">
                             <div data-i18n="Minimum Wage Master">Minimum Wage Master</div>
                           </a>
                         </li>

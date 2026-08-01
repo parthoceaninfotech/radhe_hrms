@@ -303,16 +303,22 @@ if ($action === 'view' || $action === 'list') {
     exit;
 
 } else if ($action === 'delete') {
-    $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-    if ($id > 0) {
-        $result = $ai_db->aiQuery("DELETE FROM hrms_employeemaster WHERE id = $id AND company_id = $company_id");
-        if ($result) {
-            echo json_encode(['status' => 'success', 'message' => 'Employee deleted successfully.']);
+    $ids = isset($_GET['id']) ? $_GET['id'] : '';
+    if (!empty($ids)) {
+        $id_arr = array_filter(array_map('intval', explode(',', $ids)));
+        if (!empty($id_arr)) {
+            $id_list = implode(',', $id_arr);
+            $result = $ai_db->aiQuery("DELETE FROM hrms_employeemaster WHERE id IN ($id_list) AND company_id = $company_id");
+            if ($result) {
+                echo json_encode(['status' => 'success', 'message' => 'Employee record(s) deleted successfully.']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Failed to delete employee record(s).']);
+            }
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Failed to delete employee.']);
+            echo json_encode(['status' => 'error', 'message' => 'Invalid ID(s) specified.']);
         }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Invalid ID specified.']);
+        echo json_encode(['status' => 'error', 'message' => 'No employee ID(s) specified.']);
     }
     exit;
 }

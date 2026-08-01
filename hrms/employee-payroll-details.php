@@ -75,7 +75,7 @@ include 'header.php';
                 class="form-control form-control-sm text-center bg-white border-secondary"
                 style="font-size: 11px; width: 70px;" />
             </div>
-            <div class="col-md-4 d-flex align-items-center gap-2 justify-content-end">
+            <div class="col-md-4 d-flex align-items-center gap-2 justify-content-end" style="display: none !important;">
               <div class="form-check">
                 <input class="form-check-input border-secondary" type="checkbox" name="ptax_applicable" id="chkPTax"
                   value="1">
@@ -347,6 +347,42 @@ include 'header.php';
                             class="form-control form-control-sm text-end border-0 calc-trigger" name="leave_allow_amt"
                             id="leave_allow_amt" style="font-size: 11px;" /></td>
                       </tr>
+                      <tr class="border-secondary">
+                        <td class="text-start border-secondary bg-white">BONUS</td>
+                        <td class="border-secondary bg-white">13</td>
+                        <td class="border-secondary p-0" style="background-color: #a61c1c !important;">
+                          <select name="bonus_type" id="bonus_type"
+                            class="form-select form-select-sm border-0 text-center fw-bold text-white calc-trigger"
+                            style="font-size: 11px; padding: 2px; background-color: #a61c1c !important; border-radius: 0;">
+                            <option value="V" class="bg-white text-dark" selected>V</option>
+                            <option value="P" class="bg-white text-dark">P</option>
+                          </select>
+                        </td>
+                        <td class="border-secondary bg-white"><input type="number" step="0.01"
+                            class="form-control form-control-sm text-end border-0 calc-trigger" name="bonus_rate"
+                            id="bonus_rate" style="font-size: 11px;" /></td>
+                        <td class="border-secondary bg-white"><input type="number" step="0.01"
+                            class="form-control form-control-sm text-end border-0 calc-trigger" name="bonus_amt"
+                            id="bonus_amt" style="font-size: 11px;" /></td>
+                      </tr>
+                      <tr class="border-secondary">
+                        <td class="text-start border-secondary bg-white">GRATUITY</td>
+                        <td class="border-secondary bg-white">14</td>
+                        <td class="border-secondary p-0" style="background-color: #a61c1c !important;">
+                          <select name="gratuity_type" id="gratuity_type"
+                            class="form-select form-select-sm border-0 text-center fw-bold text-white calc-trigger"
+                            style="font-size: 11px; padding: 2px; background-color: #a61c1c !important; border-radius: 0;">
+                            <option value="V" class="bg-white text-dark" selected>V</option>
+                            <option value="P" class="bg-white text-dark">P</option>
+                          </select>
+                        </td>
+                        <td class="border-secondary bg-white"><input type="number" step="0.01"
+                            class="form-control form-control-sm text-end border-0 calc-trigger" name="gratuity_rate"
+                            id="gratuity_rate" style="font-size: 11px;" /></td>
+                        <td class="border-secondary bg-white"><input type="number" step="0.01"
+                            class="form-control form-control-sm text-end border-0 calc-trigger" name="gratuity_amt"
+                            id="gratuity_amt" style="font-size: 11px;" /></td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -375,7 +411,7 @@ include 'header.php';
                       </tr>
                     </thead>
                     <tbody>
-                      <tr class="border-secondary">
+                      <tr class="border-secondary" style="display: none !important;">
                         <td class="text-start border-secondary bg-white">PROFESSIONAL TAX</td>
                         <td class="border-secondary bg-white">13</td>
                         <td class="border-secondary p-0" style="background-color: #a61c1c !important;">
@@ -629,6 +665,48 @@ include 'header.php';
     let currentIndex = -1;
     let currentMode = 'view'; // view, add, edit
 
+    let currentPFConfig = {
+      max_amount: 1800,
+      employee_pf: 12.00,
+      components: ['BASIC']
+    };
+
+    function loadBranchPFConfig(branchId, callback) {
+      if (!branchId) {
+        currentPFConfig = { max_amount: 1800, employee_pf: 12.00, components: ['BASIC'] };
+        if (callback) callback();
+        return;
+      }
+      // Fetch branch-wise active components
+      fetch(`actions/pf-rate-master-action.php?action=get_components&branch_id=${branchId}`)
+        .then(res => res.json())
+        .then(compRes => {
+          let activeComps = ['BASIC'];
+          if (compRes.status === 'success') {
+            activeComps = compRes.data.filter(c => c.is_applicable === 1).map(c => c.db_name);
+          }
+          // Fetch branch-wise rate details
+          fetch(`actions/pf-rate-master-action.php?action=view_rates&branch_id=${branchId}`)
+            .then(res => res.json())
+            .then(rateRes => {
+              let maxAmt = 1800;
+              let empPf = 12.00;
+              if (rateRes.status === 'success' && rateRes.data.length > 0) {
+                maxAmt = parseFloat(rateRes.data[0].max_amount) || 1800;
+                empPf = parseFloat(rateRes.data[0].employee_pf) || 12.00;
+              }
+              currentPFConfig = {
+                max_amount: maxAmt,
+                employee_pf: empPf,
+                components: activeComps
+              };
+              if (callback) callback();
+            })
+            .catch(() => { if (callback) callback(); });
+        })
+        .catch(() => { if (callback) callback(); });
+    }
+
     // Center card initially on load
     const initialLeft = (window.innerWidth - card.offsetWidth) / 2;
     card.style.left = Math.max(0, initialLeft) + "px";
@@ -666,8 +744,10 @@ include 'header.php';
       const attenAmt = parseFloat(document.getElementById("atten_amt").value) || 0;
       const otherAllowAmt = parseFloat(document.getElementById("other_allow_amt").value) || 0;
       const leaveAllowAmt = parseFloat(document.getElementById("leave_allow_amt").value) || 0;
+      const bonusAmt = parseFloat(document.getElementById("bonus_amt").value) || 0;
+      const gratuityAmt = parseFloat(document.getElementById("gratuity_amt").value) || 0;
 
-      const totalEarn = basicAmt + hraAmt + medicalAmt + conveyanceAmt + educationAmt + washingAmt + paperAmt + recoveryAmt + cityAmt + attenAmt + otherAllowAmt + leaveAllowAmt;
+      const totalEarn = basicAmt + hraAmt + medicalAmt + conveyanceAmt + educationAmt + washingAmt + paperAmt + recoveryAmt + cityAmt + attenAmt + otherAllowAmt + leaveAllowAmt + bonusAmt + gratuityAmt;
       document.getElementById("total_earn").value = totalEarn ? totalEarn.toFixed(2) : "";
 
       // P.Tax handling
@@ -692,8 +772,40 @@ include 'header.php';
       const pfApplicable = document.getElementById("chkPF").checked;
       let pfAmt = 0;
       if (pfApplicable) {
-        const pfPercentage = parseFloat(document.getElementById("pf_percentage").value) || 12.00;
-        pfAmt = (basicAmt * pfPercentage) / 100;
+        let pfWages = 0;
+        const componentMap = {
+          'BASIC': basicAmt,
+          'HOUSE RENT ALLOWANCE': hraAmt,
+          'MEDICAL ALLOWANCE': medicalAmt,
+          'CONVEYANCE ALLOWANCE': conveyanceAmt,
+          'EDUCATIONAL ALLOWANCE': educationAmt,
+          'WASH. ALLOW.': washingAmt,
+          'PAPER ALLOW.': paperAmt,
+          'RECOVERY ALLOW': recoveryAmt,
+          'CITY ALLOW': cityAmt,
+          'ATTEN ALLOW': attenAmt,
+          'OTHER ALLOWANCE': otherAllowAmt,
+          'BONUS': bonusAmt,
+          'GRATUITY': gratuityAmt
+        };
+
+        if (currentPFConfig && currentPFConfig.components && currentPFConfig.components.length > 0) {
+          currentPFConfig.components.forEach(comp => {
+            if (componentMap.hasOwnProperty(comp)) {
+              pfWages += componentMap[comp];
+            }
+          });
+        } else {
+          pfWages = basicAmt;
+        }
+
+        const pfPercentage = parseFloat(document.getElementById("pf_percentage").value) || (currentPFConfig ? currentPFConfig.employee_pf : 12.00);
+        pfAmt = (pfWages * pfPercentage) / 100;
+
+        const maxLimit = (currentPFConfig && parseFloat(currentPFConfig.max_amount) > 0) ? parseFloat(currentPFConfig.max_amount) : 1800;
+        if (pfAmt > maxLimit) {
+          pfAmt = maxLimit;
+        }
       }
       document.getElementById("pf_amount").value = pfAmt ? pfAmt.toFixed(2) : "";
       document.getElementById("employer_pf").value = pfAmt ? pfAmt.toFixed(2) : "";
@@ -774,6 +886,24 @@ include 'header.php';
       let leaveAllowAmt = (leaveAllowType === 'P') ? (basicAmt * leaveAllowRate / 100) : leaveAllowRate;
       document.getElementById("leave_allow_amt").value = leaveAllowRate ? leaveAllowAmt.toFixed(2) : "";
 
+      // Bonus
+      const bonusRate = parseFloat(document.getElementById("bonus_rate").value) || 0;
+      const bonusType = document.getElementById("bonus_type").value;
+      let bonusAmt = (bonusType === 'P') ? (basicAmt * bonusRate / 100) : bonusRate;
+      document.getElementById("bonus_amt").value = bonusRate ? bonusAmt.toFixed(2) : "";
+
+      // Sync to top Bonus (%) field
+      document.getElementById("bonus_percentage").value = bonusRate ? bonusRate.toFixed(2) : "";
+
+      // Gratuity
+      const gratuityRate = parseFloat(document.getElementById("gratuity_rate").value) || 0;
+      const gratuityType = document.getElementById("gratuity_type").value;
+      let gratuityAmt = (gratuityType === 'P') ? (basicAmt * gratuityRate / 100) : gratuityRate;
+      document.getElementById("gratuity_amt").value = gratuityRate ? gratuityAmt.toFixed(2) : "";
+
+      // Sync to top Gratuity field
+      document.getElementById("gratuity").value = gratuityAmt ? gratuityAmt.toFixed(2) : "";
+
       // Other Deduction
       const otherDedRate = parseFloat(document.getElementById("other_ded_rate").value) || 0;
       const otherDedType = document.getElementById("other_ded_type").value;
@@ -782,6 +912,21 @@ include 'header.php';
 
       calculateTotals();
     }
+
+    // Sync top Gratuity field down to table amount
+    document.getElementById("gratuity").addEventListener('input', function () {
+      const val = parseFloat(this.value) || 0;
+      document.getElementById("gratuity_amt").value = val.toFixed(2);
+      document.getElementById("gratuity_rate").value = val.toFixed(2);
+      calculateTotals();
+    });
+
+    // Sync top Bonus (%) field down to table rate
+    document.getElementById("bonus_percentage").addEventListener('input', function () {
+      const val = parseFloat(this.value) || 0;
+      document.getElementById("bonus_rate").value = val.toFixed(2);
+      updateAmounts();
+    });
 
     // Bind calculate listeners
     form.querySelectorAll(".calc-trigger").forEach(input => {
@@ -848,7 +993,7 @@ include 'header.php';
                   inp.value = "0.00";
                 }
               });
-              calculateTotals();
+              loadBranchPFConfig(res.data.branch_id, calculateTotals);
             }
           } else {
             alert(res.message);
@@ -978,6 +1123,14 @@ include 'header.php';
       document.getElementById("leave_allow_amt").value = payroll.leave_allow_amt;
       document.getElementById("leave_allow_type").value = payroll.leave_allow_type || 'V';
 
+      document.getElementById("bonus_rate").value = payroll.bonus_rate || payroll.bonus_percentage || '0.00';
+      document.getElementById("bonus_amt").value = payroll.bonus_amt || '0.00';
+      document.getElementById("bonus_type").value = payroll.bonus_type || 'V';
+
+      document.getElementById("gratuity_rate").value = payroll.gratuity_rate || '0.00';
+      document.getElementById("gratuity_amt").value = payroll.gratuity_amt || payroll.gratuity || '0.00';
+      document.getElementById("gratuity_type").value = payroll.gratuity_type || 'V';
+
       document.getElementById("ptax_rate_ded").value = payroll.ptax_amount;
       document.getElementById("ptax_amt_ded").value = payroll.ptax_amount;
       document.getElementById("ptax_type").value = payroll.ptax_type || 'V';
@@ -996,6 +1149,9 @@ include 'header.php';
       document.getElementById("navLabel").textContent = `${index + 1} / ${payrollList.length}`;
       document.getElementById("rangeSlider").value = index;
       document.getElementById("rangeSlider").max = payrollList.length - 1;
+
+      // Load branch PF config for active calculations
+      loadBranchPFConfig(payroll.branch_id, calculateTotals);
 
       setMode('view');
     }

@@ -35,7 +35,18 @@ if ($action === 'get_employee') {
     $res = $ai_db->aiGetQuery($sql);
 
     if (count($res) > 0) {
-        echo json_encode(['status' => 'success', 'data' => $res[0]]);
+        $employee = $res[0];
+        $branch_id = intval($employee['branch_id']);
+        
+        // Fetch branch-wise PF rate configuration
+        $pf_rates = $ai_db->aiGetQuery("SELECT * FROM hrms_pf_rates WHERE company_id = $company_id AND branch_id = $branch_id ORDER BY effective_date DESC, id DESC LIMIT 1");
+        $employee['pf_rate_config'] = (count($pf_rates) > 0) ? $pf_rates[0] : null;
+
+        // Fetch branch-wise active PF components
+        $pf_comps = $ai_db->aiGetQuery("SELECT component_name FROM hrms_pf_branch_components WHERE company_id = $company_id AND branch_id = $branch_id AND is_applicable = 1");
+        $employee['pf_components'] = array_column($pf_comps, 'component_name');
+
+        echo json_encode(['status' => 'success', 'data' => $employee]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Employee not found.']);
     }
@@ -44,7 +55,7 @@ if ($action === 'get_employee') {
 
 if ($action === 'view') {
     // Fetch all payroll details for this company's employees
-    $sql = "SELECT p.*, e.emp_code, e.emp_name 
+    $sql = "SELECT p.*, e.emp_code, e.emp_name, e.branch_id 
             FROM hrms_employee_payroll p
             INNER JOIN hrms_employeemaster e ON p.employee_id = e.id
             WHERE p.company_id = $company_id";
@@ -80,8 +91,16 @@ if ($action === 'save') {
     $pf_amount = floatval($_POST['pf_amount'] ?? 0.00);
     $ptax_applicable = isset($_POST['ptax_applicable']) ? 1 : 0;
     $ptax_amount = floatval($_POST['ptax_amount'] ?? 0.00);
-    $gratuity = floatval($_POST['gratuity'] ?? 0.00);
-    $bonus_percentage = floatval($_POST['bonus_percentage'] ?? 0.00);
+    $bonus_rate = floatval($_POST['bonus_rate'] ?? 0.00);
+    $bonus_amt = floatval($_POST['bonus_amt'] ?? 0.00);
+    $bonus_type = mysqli_real_escape_string($ai_conn, $_POST['bonus_type'] ?? 'V');
+
+    $gratuity_rate = floatval($_POST['gratuity_rate'] ?? 0.00);
+    $gratuity_amt = floatval($_POST['gratuity_amt'] ?? 0.00);
+    $gratuity_type = mysqli_real_escape_string($ai_conn, $_POST['gratuity_type'] ?? 'V');
+
+    $gratuity = $gratuity_amt;
+    $bonus_percentage = $bonus_rate;
 
     // Rates, Amounts & Types
     $basic_rate = floatval($_POST['basic_rate'] ?? 0.00);
@@ -164,6 +183,13 @@ if ($action === 'save') {
                     gratuity = $gratuity,
                     bonus_percentage = $bonus_percentage,
                     
+                    bonus_rate = $bonus_rate,
+                    bonus_amt = $bonus_amt,
+                    bonus_type = '$bonus_type',
+                    gratuity_rate = $gratuity_rate,
+                    gratuity_amt = $gratuity_amt,
+                    gratuity_type = '$gratuity_type',
+                    
                     basic_rate = $basic_rate,
                     basic_amt = $basic_amt,
                     basic_type = '$basic_type',
@@ -229,6 +255,7 @@ if ($action === 'save') {
         $sql = "INSERT INTO hrms_employee_payroll (
                     employee_id, company_id, payl_type, pf_applicable, pf_percentage, pf_amount,
                     ptax_applicable, ptax_amount, gratuity, bonus_percentage,
+                    bonus_rate, bonus_amt, bonus_type, gratuity_rate, gratuity_amt, gratuity_type,
                     basic_rate, basic_amt, basic_type,
                     hra_rate, hra_amt, hra_type, 
                     medical_rate, medical_amt, medical_type,
@@ -246,6 +273,7 @@ if ($action === 'save') {
                 ) VALUES (
                     $employee_id, $company_id, '$payl_type', $pf_applicable, $pf_percentage, $pf_amount,
                     $ptax_applicable, $ptax_amt_ded, $gratuity, $bonus_percentage,
+                    $bonus_rate, $bonus_amt, '$bonus_type', $gratuity_rate, $gratuity_amt, '$gratuity_type',
                     $basic_rate, $basic_amt, '$basic_type',
                     $hra_rate, $hra_amt, '$hra_type', 
                     $medical_rate, $medical_amt, '$medical_type',
